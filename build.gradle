@@ -1,0 +1,48 @@
+apply plugin: 'ros-java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'catkin'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+defaultTasks 'install'
+
+group = 'com.alfred.ros'
+
+buildscript {
+    def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
+    def rosMavenRepository = "$System.env.ROS_MAVEN_REPOSITORY"
+    
+    if ( rosMavenRepository == 'null' ) {
+        rosMavenRepository = "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
+    }
+    
+    repositories {
+        rosMavenPath.each { p ->
+            maven {
+                url p
+            }
+        }
+        mavenLocal()
+        maven {
+            url rosMavenRepository
+        }
+    }
+    dependencies {
+        classpath group: 'org.ros.rosjava_bootstrap', name: 'gradle_plugins', version: '0.1.20'
+    }
+}
+
+allprojects {
+    version = project.catkin.pkg.version
+}
+
+dependencies {
+  compile 'org.ros.rosjava_core:rosjava:[0,)'
+  compile 'org.ros.rosjava:rosjava_dynamic_reconfigure:[0,)'
+  compile 'com.github.rosjava.zeroconf_jmdns_suite:jmdns:[0,)'
+  compile 'com.alfred.ros:media_msgs:[0,)'
+  compile 'com.alfred.ros:network_zeroconf:[0,)'
+  //compile project('..:network_zeroconf')
+}
