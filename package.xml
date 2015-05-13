@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>media_driver</name>
-  <version>0.1.38</version>
+  <version>0.1.39</version>
   <description>This package is Media interface for RosJava.</description>
   <maintainer email="mick.gaillard@gmail.com">Mickaël Gaillard</maintainer>
   <maintainer email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</maintainer>
