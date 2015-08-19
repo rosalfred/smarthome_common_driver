@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Alfred package.
+ *
+ * (c) Mickael Gaillard <mick.gaillard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.alfred.ros.media;
 
 import org.ros.node.ConnectedNode;
@@ -7,6 +15,11 @@ import media_msgs.PlayerInfo;
 import media_msgs.SpeakerInfo;
 import media_msgs.StateData;
 
+/**
+ *
+ * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ *
+ */
 public class StateDataUtil {
 
     public static boolean isEqual(StateData state1, StateData state2) {
@@ -16,7 +29,7 @@ public class StateDataUtil {
             result &= isEqual(state1.getMonitor(),  state2.getMonitor());
             result &= isEqual(state1.getPlayer(),   state2.getPlayer());
             result &= isEqual(state1.getSpeaker(),  state2.getSpeaker());
-        } 
+        }
         return result;
     }
 

@@ -1,7 +1,20 @@
+/**
+ * This file is part of the Alfred package.
+ *
+ * (c) Mickael Gaillard <mick.gaillard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.alfred.ros.media;
 
 import media_msgs.PlayerInfo;
 
+/**
+ *
+ * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ *
+ */
 public interface IPlayer extends IModule<PlayerInfo> {
     // Media
     public static final String OP_PAUSE        = "pause";
@@ -34,7 +47,7 @@ public interface IPlayer extends IModule<PlayerInfo> {
     public static final String OP_LEFT         = "left";
     public static final String OP_RIGHT        = "right";
     public static final String OP_TXT          = "text";
-    
+
     public static final String URI_MEDIA_YOUTUBE = "youtube://";
     public static final String URI_MEDIA_IMDB = "imdb://";
     public static final String URI_MEDIA = "media://";

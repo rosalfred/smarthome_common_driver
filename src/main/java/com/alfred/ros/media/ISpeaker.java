@@ -1,9 +1,22 @@
+/**
+ * This file is part of the Alfred package.
+ *
+ * (c) Mickael Gaillard <mick.gaillard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.alfred.ros.media;
 
 import media_msgs.SpeakerInfo;
 import media_msgs.ToggleMuteSpeakerRequest;
 import media_msgs.ToggleMuteSpeakerResponse;
 
+/**
+ *
+ * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ *
+ */
 public interface ISpeaker extends IModule<SpeakerInfo> {
     public static final int LEVEL_MIN = 0;
     public static final int LEVEL_MAX = 100;

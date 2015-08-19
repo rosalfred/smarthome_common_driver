@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Alfred package.
+ *
+ * (c) Mickael Gaillard <mick.gaillard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.alfred.ros.media;
 
 import media_msgs.Command;
@@ -19,8 +27,12 @@ import com.alfred.ros.zeroconf.NodeConfiguration;
 import com.alfred.ros.zeroconf.NodeConfiguration.NodeCapability;
 import com.alfred.ros.zeroconf.Zeroconf;
 
-
-public abstract class BaseMediaNodeMain 
+/**
+ *
+ * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ *
+ */
+public abstract class BaseMediaNodeMain
         extends AbstractNodeMain {
 
     // Constants
@@ -28,9 +40,9 @@ public abstract class BaseMediaNodeMain
     public static final String PUB_STATE    = "statedata";
     public static final String SUB_CMD      = "cmd_action";
     public static final String SUB_STATE_ROBOT    = "robotsay";
-    
+
     public static String nodeName = "unknow";
-    
+
     // Parameters
     protected String prefix;
     protected String fixedFrame;
@@ -47,7 +59,7 @@ public abstract class BaseMediaNodeMain
     protected ConnectedNode connectedNode;
     protected StateData stateData;
     private StateData oldStateData;
-    
+
     // Capabilities
     protected IPlayer   player  = null;
     protected ISpeaker  speaker = null;
@@ -74,7 +86,7 @@ public abstract class BaseMediaNodeMain
 
     /**
      * Refresh {@link StateData} if connected object is available or try to connect it.
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     protected void refreshStateData() throws InterruptedException {
 
@@ -102,8 +114,8 @@ public abstract class BaseMediaNodeMain
 
         if (!StateDataUtil.isEqual(this.stateData , this.oldStateData)) {
             StateData stateDataNew = StateDataUtil.makeNewCopy(
-                    this.connectedNode, 
-                    fixedFrame, 
+                    this.connectedNode,
+                    fixedFrame,
                     this.stateData);
             this.oldStateData = stateDataNew;
             this.pubStateData.publish(stateDataNew);
@@ -116,7 +128,7 @@ public abstract class BaseMediaNodeMain
      * @param message the received media action message.
      */
     public void onNewMessage(MediaAction message) {
-        this.logI(String.format("Command \"%s\"... for %s", 
+        this.logI(String.format("Command \"%s\"... for %s",
                 message.getMethod(),
                 message.getUri()));
 
@@ -124,15 +136,15 @@ public abstract class BaseMediaNodeMain
             if (this.monitor != null) {
                 this.monitor.callbackCmdAction(message, this.stateData);
             }
-    
+
             if (this.player != null) {
                 this.player.callbackCmdAction(message, this.stateData);
             }
-    
+
             if (this.speaker != null) {
                 this.speaker.callbackCmdAction(message, this.stateData);
             }
-    
+
             if (this.system != null) {
                 this.system.callbackCmdAction(message, this.stateData);
             }
@@ -149,13 +161,13 @@ public abstract class BaseMediaNodeMain
      */
     protected void onNewMessage(Command msg) {
         String[] wheres = msg.getContext().getWhere().split(" ");
-        
+
         for (String where : wheres) {
             if (this.prefix.contains(where)) { // "/home/salon/")) {
                 this.onNewMessage(CommandUtil.toMediaAction(connectedNode, msg));
             }
         }
-        
+
     }
 
     /**
@@ -167,13 +179,13 @@ public abstract class BaseMediaNodeMain
                 std_msgs.String._TYPE);
 
         this.pubStateData = this.connectedNode.newPublisher(
-                this.prefix + PUB_STATE, 
+                this.prefix + PUB_STATE,
                 StateData._TYPE);
         this.pubStateData.setLatchMode(true);
 
         // Local topic (mapped by prefix and namespace)
         this.subLocalMediaAction = this.connectedNode.newSubscriber(
-                this.prefix + SUB_CMD, 
+                this.prefix + SUB_CMD,
                 MediaAction._TYPE);
         this.subLocalMediaAction.addMessageListener(new MessageListener<MediaAction>() {
 
@@ -181,12 +193,12 @@ public abstract class BaseMediaNodeMain
             public void onNewMessage(MediaAction msg) {
                 BaseMediaNodeMain.this.onNewMessage(msg);
             }
-            
+
         });
 
         // Global topic registration (no prefix...)
         this.subGlobalCommand = this.connectedNode.newSubscriber(
-                "/" + SUB_STATE_ROBOT, 
+                "/" + SUB_STATE_ROBOT,
                 Command._TYPE);
         this.subGlobalCommand.addMessageListener(new MessageListener<Command>(){
 
@@ -194,7 +206,7 @@ public abstract class BaseMediaNodeMain
             public void onNewMessage(Command msg) {
                 BaseMediaNodeMain.this.onNewMessage(msg);
             }
-            
+
         });
     }
 
@@ -215,18 +227,18 @@ public abstract class BaseMediaNodeMain
 
         this.logI(String.format("Start %s node...", nodeName));
     }
-    
+
     @Override
     public void onShutdown(Node node) {
         this.logI("Stop node !");
-        
+
         if (this.serverReconfig != null)
             this.serverReconfig.close();
-        
+
         super.onShutdown(node);
         this.connectedNode = null;
     }
-    
+
     /**
      * On node error is throw.
      */
@@ -235,7 +247,7 @@ public abstract class BaseMediaNodeMain
         super.onError(node, throwable);
         this.logE(throwable.getMessage());
     }
-    
+
     public void startFinal() {
         this.initialize();
 
@@ -248,7 +260,7 @@ public abstract class BaseMediaNodeMain
             }
         });
     }
-    
+
     /**
      * On node shutdown start.
      */
@@ -260,12 +272,12 @@ public abstract class BaseMediaNodeMain
 
         this.initTopics();
         this.initServices();
-        
+
         this.publishZeroConf();
-        
+
         this.stateData = this.pubStateData.newMessage();
     }
-    
+
     public void wakeOnLan() {
         std_msgs.String message = this.connectedNode.getTopicMessageFactory()
         		.newFromType(std_msgs.String._TYPE);
@@ -273,46 +285,46 @@ public abstract class BaseMediaNodeMain
 
         this.pubWol.publish(message);
     }
-    
+
     private void publishZeroConf() {
         final Zeroconf publisher = new Zeroconf();
-        
+
         final DiscoveredService service =
                 this.getConfiguration().toDiscoveredService();
-        
+
         service.name = nodeName;
         service.type = "_ros-node._tcp";
         service.domain = "local";
         service.port = 8888;
-        
+
         new Thread(new Runnable() {
-            
+
             @Override
             public void run() {
                 publisher.addService(service);
             }
         }).start();
     }
-    
+
     protected NodeConfiguration getConfiguration() {
         NodeConfiguration configuration = new NodeConfiguration();
         configuration.setMasterAddress(this.connectedNode.getMasterUri().getHost());
         configuration.setNodePath(this.prefix.substring(0, this.prefix.length() - 1));
         configuration.setNodeType(this.getClass().getName());
-        
+
         NodeConfiguration.NodePermission permission =
                 new NodeConfiguration.NodePermission();
         permission.setExclude(true);
         permission.setName("Permission");
         configuration.getPermissions().add(permission);
         configuration.getCapabilities().add(NodeCapability.ALL);
-        
+
         return configuration;
     }
 
     // Log assessors
     /**
-     * Log a message with debug log level. 
+     * Log a message with debug log level.
      * @param message this message
      */
     public void logD(final Object message) {
@@ -320,7 +332,7 @@ public abstract class BaseMediaNodeMain
     }
 
     /**
-     * Log a message with info log level. 
+     * Log a message with info log level.
      * @param message this message
      */
     public void logI(final Object message) {
@@ -328,7 +340,7 @@ public abstract class BaseMediaNodeMain
     }
 
     /**
-     * Log a message with error log level. 
+     * Log a message with error log level.
      * @param message this message
      */
     public void logE(final Object message) {
@@ -336,7 +348,7 @@ public abstract class BaseMediaNodeMain
     }
 
     /**
-     * Log a message with error log level. 
+     * Log a message with error log level.
      * @param message this message
      */
     public void logE(final Exception message) {
