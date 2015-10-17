@@ -8,7 +8,10 @@
  */
 package com.alfred.ros.media;
 
-import media_msgs.SpeakerInfo;
+import com.alfred.ros.core.IModule;
+
+import media_msgs.MediaAction;
+import media_msgs.StateData;
 import media_msgs.ToggleMuteSpeakerRequest;
 import media_msgs.ToggleMuteSpeakerResponse;
 
@@ -17,7 +20,7 @@ import media_msgs.ToggleMuteSpeakerResponse;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public interface ISpeaker extends IModule<SpeakerInfo> {
+public interface ISpeaker extends IModule<StateData, MediaAction> {
     public static final int LEVEL_MIN = 0;
     public static final int LEVEL_MAX = 100;
     public static final int LEVEL_STEP = 10;

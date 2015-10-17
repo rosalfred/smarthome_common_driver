@@ -9,6 +9,9 @@
  */
 package com.alfred.ros.media;
 
+import com.alfred.ros.core.IModule;
+
+import media_msgs.MediaAction;
 import media_msgs.StateData;
 
 /**
@@ -16,7 +19,7 @@ import media_msgs.StateData;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public interface IMonitor extends IModule<StateData> {
+public interface IMonitor extends IModule<StateData, MediaAction> {
 
     public static final String OP_CHANNEL      = "channel";
 

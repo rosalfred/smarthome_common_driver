@@ -8,14 +8,17 @@
  */
 package com.alfred.ros.media;
 
-import media_msgs.PlayerInfo;
+import com.alfred.ros.core.IModule;
+
+import media_msgs.MediaAction;
+import media_msgs.StateData;
 
 /**
  *
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public interface IPlayer extends IModule<PlayerInfo> {
+public interface IPlayer extends IModule<StateData, MediaAction> {
     // Media
     public static final String OP_PAUSE        = "pause";
     public static final String OP_PLAY         = "play";

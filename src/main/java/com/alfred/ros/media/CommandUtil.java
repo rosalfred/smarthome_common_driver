@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.ros.node.ConnectedNode;
 
+import com.alfred.ros.core.IModule;
 import com.google.common.base.Joiner;
 
 import media_msgs.Command;
