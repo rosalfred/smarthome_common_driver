@@ -8,6 +8,7 @@
  */
 package com.alfred.ros.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import media_msgs.Command;
@@ -55,7 +56,7 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
     private TStateData oldStateData;
 
     // Capabilities
-    private List<IModule<TStateData, TMessage>> modules;
+    private List<IModule<TStateData, TMessage>> modules = new ArrayList<>();
 
     // Topics
     private Server<TConfiguration> serverReconfig;
@@ -254,6 +255,7 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
         this.connectedNode = connectedNode;
 
         this.configuration = this.getConfig();
+        this.configuration.loadParameters();
 
         this.logI(String.format("Start %s node...", this.nodeName));
     }
@@ -366,6 +368,10 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
                 config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
 
         return config;
+    }
+
+    public StateDataComparator<TStateData> getComparator() {
+        return this.comparator;
     }
 
     // Log assessors
