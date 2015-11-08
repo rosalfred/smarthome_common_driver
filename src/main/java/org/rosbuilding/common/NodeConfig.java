@@ -1,4 +1,4 @@
-package com.alfred.ros.core;
+package org.rosbuilding.common;
 
 import org.ros.dynamic_reconfigure.server.BaseConfig;
 import org.ros.node.ConnectedNode;

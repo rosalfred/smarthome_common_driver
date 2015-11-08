@@ -1,6 +1,6 @@
-package com.alfred.ros.core;
+package org.rosbuilding.common;
 
-import media_msgs.Command;
+import rosbuilding_msgs.Command;
 
 import org.ros.internal.message.Message;
 import org.ros.node.ConnectedNode;

@@ -6,19 +6,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.alfred.ros.media;
+package org.rosbuilding.common.media;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
 import org.ros.node.ConnectedNode;
+import org.rosbuilding.common.IModule;
 
-import com.alfred.ros.core.IModule;
 import com.google.common.base.Joiner;
 
-import media_msgs.Command;
 import media_msgs.MediaAction;
+import rosbuilding_msgs.Command;
 
 /**
  *

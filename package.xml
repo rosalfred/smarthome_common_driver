@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>media_driver</name>
+  <name>common_driver</name>
   <version>0.1.48</version>
-  <description>This package is Media interface for RosJava.</description>
+  <description>This package is Common interface for RosJava.</description>
   <maintainer email="mick.gaillard@gmail.com">Mickaël Gaillard</maintainer>
   <maintainer email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</maintainer>
   <license>GPLv3</license>
@@ -24,6 +24,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>rosjava_core</build_depend>
+  <build_depend>rosbuilding_msgs</build_depend>
   <build_depend>media_msgs</build_depend>
   <build_depend>heater_msgs</build_depend>
   <build_depend>rosjava_dynamic_reconfigure</build_depend>
@@ -31,6 +32,7 @@
   <build_depend>rosjava_build_tools</build_depend>
 
   <run_depend>rosjava_core</run_depend>
+  <run_depend>rosbuilding_msgs</run_depend>
   <run_depend>media_msgs</run_depend>
   <run_depend>heater_msgs</run_depend>
   <run_depend>rosjava_dynamic_reconfigure</run_depend>

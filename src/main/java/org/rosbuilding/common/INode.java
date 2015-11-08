@@ -1,4 +1,4 @@
-package com.alfred.ros.core;
+package org.rosbuilding.common;
 
 import org.ros.internal.message.Message;
 

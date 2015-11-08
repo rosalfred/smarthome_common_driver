@@ -1,4 +1,4 @@
-package com.alfred.ros.core;
+package org.rosbuilding.common;
 
 import java.io.IOException;
 

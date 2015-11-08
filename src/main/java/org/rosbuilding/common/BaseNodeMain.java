@@ -6,12 +6,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.alfred.ros.core;
+package org.rosbuilding.common;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import media_msgs.Command;
 
 import org.ros.concurrent.CancellableLoop;
 import org.ros.dynamic_reconfigure.server.Server;
@@ -24,12 +22,15 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
+import org.rosbuilding.zeroconf.DiscoveredService;
+import org.rosbuilding.zeroconf.NodeConfiguration;
+import org.rosbuilding.zeroconf.NodeConfiguration.NodeCapability;
+import org.rosbuilding.zeroconf.Zeroconf;
 
-import com.alfred.ros.zeroconf.DiscoveredService;
-import com.alfred.ros.zeroconf.NodeConfiguration;
-import com.alfred.ros.zeroconf.NodeConfiguration.NodeCapability;
-import com.alfred.ros.zeroconf.Zeroconf;
 import com.google.common.base.Strings;
+
+import media_msgs.StateData;
+import rosbuilding_msgs.Command;
 
 /**
  *

@@ -1,10 +1,9 @@
-package com.alfred.ros.temperature;
+package org.rosbuilding.common.temperature;
 
 import sensor_msgs.Temperature;
 
 import org.ros.node.ConnectedNode;
-
-import com.alfred.ros.core.StateDataComparator;
+import org.rosbuilding.common.StateDataComparator;
 
 import heater_msgs.SensorTemperatureStateData;
 

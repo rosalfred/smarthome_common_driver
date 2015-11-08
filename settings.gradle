@@ -1,6 +1,6 @@
 //force project name
 //this is needed because repository contains multipackage and cause problem with release
-rootProject.name = 'media_driver'
+rootProject.name = 'common_driver'
 
 include '..:network_zeroconf',
     '..:rosjava_dynamic_reconfigure'

@@ -6,9 +6,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.alfred.ros.media;
+package org.rosbuilding.common.media;
 
-import com.alfred.ros.core.IModule;
+import org.rosbuilding.common.IModule;
 
 import media_msgs.MediaAction;
 import media_msgs.StateData;

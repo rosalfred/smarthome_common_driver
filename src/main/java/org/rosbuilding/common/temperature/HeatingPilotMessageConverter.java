@@ -1,10 +1,9 @@
-package com.alfred.ros.temperature;
+package org.rosbuilding.common.temperature;
 
-import media_msgs.Command;
+import rosbuilding_msgs.Command;
 
 import org.ros.node.ConnectedNode;
-
-import com.alfred.ros.core.MessageConverter;
+import org.rosbuilding.common.MessageConverter;
 
 import heater_msgs.HeatingPilotAction;
 

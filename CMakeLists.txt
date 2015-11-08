@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(media_driver)
-set(PACKAGE_PATH "com/alfred/ros")
+project(common_driver)
+set(PACKAGE_PATH "org/rosbuilding")
 
 find_package(catkin REQUIRED
   rosjava_build_tools
 
   rosjava_dynamic_reconfigure
+  rosbuilding_msgs
   media_msgs
   heater_msgs
   network_zeroconf
-  alfred_launch
 )
 
 catkin_rosjava_setup(publishMavenJavaPublicationToMavenRepository)

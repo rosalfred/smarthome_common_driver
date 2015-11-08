@@ -1,11 +1,10 @@
-package com.alfred.ros.temperature;
+package org.rosbuilding.common.temperature;
 
-import media_msgs.Command;
+import rosbuilding_msgs.Command;
 import sensor_msgs.Temperature;
 
 import org.ros.node.ConnectedNode;
-
-import com.alfred.ros.core.MessageConverter;
+import org.rosbuilding.common.MessageConverter;
 
 public class TemperatureMessageConverter implements MessageConverter<Temperature> {
     public Temperature toMessage(ConnectedNode node, Command command) {

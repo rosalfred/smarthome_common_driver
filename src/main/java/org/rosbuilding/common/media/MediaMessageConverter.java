@@ -1,15 +1,14 @@
-package com.alfred.ros.media;
+package org.rosbuilding.common.media;
 
 import java.util.Arrays;
 import java.util.List;
 
-import media_msgs.Command;
 import media_msgs.MediaAction;
+import rosbuilding_msgs.Command;
 
 import org.ros.node.ConnectedNode;
-
-import com.alfred.ros.core.IModule;
-import com.alfred.ros.core.MessageConverter;
+import org.rosbuilding.common.IModule;
+import org.rosbuilding.common.MessageConverter;
 
 public class MediaMessageConverter implements MessageConverter<MediaAction> {
     public MediaAction toMessage(ConnectedNode node, Command command) {

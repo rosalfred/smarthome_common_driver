@@ -1,4 +1,4 @@
-package com.alfred.ros.media;
+package org.rosbuilding.common.media;
 
 import media_msgs.MonitorInfo;
 import media_msgs.PlayerInfo;
@@ -6,8 +6,7 @@ import media_msgs.SpeakerInfo;
 import media_msgs.StateData;
 
 import org.ros.node.ConnectedNode;
-
-import com.alfred.ros.core.StateDataComparator;
+import org.rosbuilding.common.StateDataComparator;
 
 public class MediaStateDataComparator implements StateDataComparator<StateData> {
 
