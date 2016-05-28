@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import media_msgs.MediaAction;
-import rosbuilding_msgs.Command;
+import building_msgs.Command;
 
 import org.ros.node.ConnectedNode;
 import org.rosbuilding.common.IModule;

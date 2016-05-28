@@ -30,7 +30,7 @@ import org.rosbuilding.zeroconf.Zeroconf;
 import com.google.common.base.Strings;
 
 import media_msgs.StateData;
-import rosbuilding_msgs.Command;
+import building_msgs.Command;
 
 /**
  *

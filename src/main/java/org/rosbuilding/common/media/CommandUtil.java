@@ -18,7 +18,7 @@ import org.rosbuilding.common.IModule;
 import com.google.common.base.Joiner;
 
 import media_msgs.MediaAction;
-import rosbuilding_msgs.Command;
+import building_msgs.Command;
 
 /**
  *

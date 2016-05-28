@@ -1,6 +1,6 @@
 package org.rosbuilding.common;
 
-import rosbuilding_msgs.Command;
+import building_msgs.Command;
 
 import org.ros.internal.message.Message;
 import org.ros.node.ConnectedNode;

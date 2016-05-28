@@ -1,6 +1,6 @@
 package org.rosbuilding.common.temperature;
 
-import rosbuilding_msgs.Command;
+import building_msgs.Command;
 
 import org.ros.node.ConnectedNode;
 import org.rosbuilding.common.MessageConverter;

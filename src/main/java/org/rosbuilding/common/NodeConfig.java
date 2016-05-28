@@ -44,7 +44,7 @@ public abstract class NodeConfig extends BaseConfig {
         this.rate = this.connectedNode.getParameterTree()
                 .getInteger("~" + RATE, this.rate);
         this.mac = this.connectedNode.getParameterTree()
-                .getString("~mac", "00:01:2E:BC:16:33");
+                .getString("~mac", "00:00:00:00:00:00");
 
         if (this.rate <= 0) {
             this.rate = 1;
