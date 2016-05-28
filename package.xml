@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>common_driver</name>
-  <version>0.1.57</version>
+  <version>0.1.59</version>
   <description>This package is Common interface for RosJava.</description>
 
   <maintainer email="mick.gaillard@gmail.com">Mickaël Gaillard</maintainer>
