@@ -7,7 +7,6 @@ find_package(catkin REQUIRED
   rosjava_build_tools
 
   rosjava_dynamic_reconfigure
-  building_msgs
   media_msgs_java
   heater_msgs_java
   building_msgs_java
