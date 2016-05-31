@@ -1,9 +1,9 @@
 package org.rosbuilding.common.media;
 
-import media_msgs.MonitorInfo;
-import media_msgs.PlayerInfo;
-import media_msgs.SpeakerInfo;
-import media_msgs.StateData;
+import smarthome_media_msgs.MonitorInfo;
+import smarthome_media_msgs.PlayerInfo;
+import smarthome_media_msgs.SpeakerInfo;
+import smarthome_media_msgs.StateData;
 
 import org.ros.node.ConnectedNode;
 import org.rosbuilding.common.StateDataComparator;

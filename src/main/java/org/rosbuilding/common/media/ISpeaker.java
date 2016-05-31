@@ -10,10 +10,10 @@ package org.rosbuilding.common.media;
 
 import org.rosbuilding.common.IModule;
 
-import media_msgs.MediaAction;
-import media_msgs.StateData;
-import media_msgs.ToggleMuteSpeakerRequest;
-import media_msgs.ToggleMuteSpeakerResponse;
+import smarthome_media_msgs.MediaAction;
+import smarthome_media_msgs.StateData;
+import smarthome_media_msgs.ToggleMuteSpeakerRequest;
+import smarthome_media_msgs.ToggleMuteSpeakerResponse;
 
 /**
  *

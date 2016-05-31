@@ -1,6 +1,6 @@
 package org.rosbuilding.common;
 
-import building_msgs.Command;
+import smarthome_comm_msgs.Command;
 
 import org.ros.internal.message.Message;
 import org.ros.node.ConnectedNode;

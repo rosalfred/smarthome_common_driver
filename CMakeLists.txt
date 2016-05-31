@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(common_driver)
+project(smarthome_common_driver)
 set(PACKAGE_PATH "org/rosbuilding")
 
 find_package(catkin REQUIRED
   rosjava_build_tools
 
   rosjava_dynamic_reconfigure
-  media_msgs_java
-  heater_msgs_java
-  building_msgs_java
-  network_zeroconf
+  smarthome_media_msgs_java
+  smarthome_heater_msgs_java
+  smarthome_comm_msgs_java
+  smarthome_network_zeroconf
 )
 
 catkin_rosjava_setup(publishMavenJavaPublicationToMavenRepository)

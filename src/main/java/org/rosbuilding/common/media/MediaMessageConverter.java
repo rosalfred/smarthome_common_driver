@@ -3,8 +3,8 @@ package org.rosbuilding.common.media;
 import java.util.Arrays;
 import java.util.List;
 
-import media_msgs.MediaAction;
-import building_msgs.Command;
+import smarthome_media_msgs.MediaAction;
+import smarthome_comm_msgs.Command;
 
 import org.ros.node.ConnectedNode;
 import org.rosbuilding.common.IModule;

@@ -1,6 +1,6 @@
 package org.rosbuilding.common.temperature;
 
-import building_msgs.Command;
+import smarthome_comm_msgs.Command;
 import sensor_msgs.Temperature;
 
 import org.ros.node.ConnectedNode;

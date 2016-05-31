@@ -29,8 +29,8 @@ import org.rosbuilding.zeroconf.Zeroconf;
 
 import com.google.common.base.Strings;
 
-import media_msgs.StateData;
-import building_msgs.Command;
+import smarthome_media_msgs.StateData;
+import smarthome_comm_msgs.Command;
 
 /**
  *

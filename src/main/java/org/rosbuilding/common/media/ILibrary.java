@@ -8,10 +8,10 @@
  */
 package org.rosbuilding.common.media;
 
-import media_msgs.MediaGetItemRequest;
-import media_msgs.MediaGetItemResponse;
-import media_msgs.MediaGetItemsRequest;
-import media_msgs.MediaGetItemsResponse;
+import smarthome_media_msgs.MediaGetItemRequest;
+import smarthome_media_msgs.MediaGetItemResponse;
+import smarthome_media_msgs.MediaGetItemsRequest;
+import smarthome_media_msgs.MediaGetItemsResponse;
 
 /**
  *

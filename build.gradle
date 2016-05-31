@@ -50,13 +50,13 @@ allprojects {
 
 dependencies {
     compile 'org.ros.rosjava_core:rosjava:[0,)'
-    compile 'org.ros.rosjava_messages:building_msgs:[0,)'
-    compile 'org.ros.rosjava_messages:media_msgs:[0,)'
-    compile 'org.ros.rosjava_messages:heater_msgs:[0,)'
+    compile 'org.ros.rosjava_messages:smarthome_comm_msgs:[0,)'
+    compile 'org.ros.rosjava_messages:smarthome_media_msgs:[0,)'
+    compile 'org.ros.rosjava_messages:smarthome_heater_msgs:[0,)'
 
     compile 'org.ros.rosjava:rosjava_dynamic_reconfigure:[0,)'
-    compile 'org.rosbuilding:network_zeroconf:[0,)'
+    compile 'org.rosbuilding:smarthome_network_zeroconf:[0,)'
 
     //compile project(':..:rosjava_dynamic_reconfigure')
-    //compile project(':..:network_zeroconf')
+    //compile project(':..:smarthome_network_zeroconf')
 }

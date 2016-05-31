@@ -5,8 +5,8 @@ import sensor_msgs.Temperature;
 import org.ros.node.ConnectedNode;
 import org.rosbuilding.common.StateDataComparator;
 
-import heater_msgs.HeatingStateData;
-import heater_msgs.HeatingTemperatureSlot;
+import smarthome_heater_msgs.HeatingStateData;
+import smarthome_heater_msgs.HeatingTemperatureSlot;
 
 public class HeaterTemperatureStateDataComparator implements StateDataComparator<HeatingStateData> {
 

@@ -1,11 +1,11 @@
 package org.rosbuilding.common.temperature;
 
-import building_msgs.Command;
+import smarthome_comm_msgs.Command;
 
 import org.ros.node.ConnectedNode;
 import org.rosbuilding.common.MessageConverter;
 
-import heater_msgs.HeatingPilotAction;
+import smarthome_heater_msgs.HeatingPilotAction;
 
 public class HeatingPilotMessageConverter implements MessageConverter<HeatingPilotAction> {
     public HeatingPilotAction toMessage(ConnectedNode node, Command command) {

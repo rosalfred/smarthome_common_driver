@@ -17,8 +17,8 @@ import org.rosbuilding.common.IModule;
 
 import com.google.common.base.Joiner;
 
-import media_msgs.MediaAction;
-import building_msgs.Command;
+import smarthome_media_msgs.MediaAction;
+import smarthome_comm_msgs.Command;
 
 /**
  *
