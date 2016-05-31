@@ -2,8 +2,8 @@
 Changelog for package smarthome_common_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.60 (2016-05-31)
+-------------------
 * Rename package to smarthome_common_driver
 * Update catkin dependencies
 * Update building imports
