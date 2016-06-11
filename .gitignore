@@ -4,7 +4,6 @@
 
 #Eclipse files
 /.classpath
-/.project
 /bin
 *.iml
 /.settings
