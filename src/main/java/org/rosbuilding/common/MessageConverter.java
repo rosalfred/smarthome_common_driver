@@ -1,10 +1,11 @@
 package org.rosbuilding.common;
 
-import smarthome_comm_msgs.Command;
+import org.ros2.rcljava.internal.message.Message;
+import org.ros2.rcljava.node.Node;
 
-import org.ros.internal.message.Message;
-import org.ros.node.ConnectedNode;
+import smarthome_comm_msgs.msg.Command;
+
 
 public interface MessageConverter<TMessage extends Message> {
-    TMessage toMessage(ConnectedNode node, Command command);
+    TMessage toMessage(Node node, Command command);
 }

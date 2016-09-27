@@ -1,11 +1,11 @@
 package org.rosbuilding.common.media;
 
-import smarthome_media_msgs.MonitorInfo;
-import smarthome_media_msgs.PlayerInfo;
-import smarthome_media_msgs.SpeakerInfo;
-import smarthome_media_msgs.StateData;
+import smarthome_media_msgs.msg.MonitorInfo;
+import smarthome_media_msgs.msg.PlayerInfo;
+import smarthome_media_msgs.msg.SpeakerInfo;
+import smarthome_media_msgs.msg.StateData;
 
-import org.ros.node.ConnectedNode;
+import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.StateDataComparator;
 
 public class MediaStateDataComparator implements StateDataComparator<StateData> {
@@ -23,10 +23,10 @@ public class MediaStateDataComparator implements StateDataComparator<StateData> 
     }
 
     @Override
-    public StateData makeNewCopy(ConnectedNode conectedNode, String frameId,
+    public StateData makeNewCopy(Node conectedNode, String frameId,
             StateData stateData) {
-        StateData result = conectedNode.getTopicMessageFactory().newFromType(StateData._TYPE);
-        result.getHeader().setFrameId(frameId);
+        StateData result = new StateData(); //conectedNode.getTopicMessageFactory().newFromType(StateData._TYPE);
+//        result.getHeader().setFrameId(frameId); // Removed on ROS2
         result.getHeader().setStamp(conectedNode.getCurrentTime());
         result.setState(stateData.getState());
         result.setMonitor(makeNewCopy(conectedNode, stateData.getMonitor()));
@@ -36,9 +36,9 @@ public class MediaStateDataComparator implements StateDataComparator<StateData> 
         return result;
     }
 
-    private static SpeakerInfo makeNewCopy(ConnectedNode conectedNode,
+    private static SpeakerInfo makeNewCopy(Node conectedNode,
             SpeakerInfo speaker) {
-        SpeakerInfo result = conectedNode.getTopicMessageFactory().newFromType(SpeakerInfo._TYPE);
+        SpeakerInfo result = new SpeakerInfo(); //conectedNode.getTopicMessageFactory().newFromType(SpeakerInfo._TYPE);
         if (speaker != null) {
             result.setChannel(speaker.getChannel());
             result.setLevel(speaker.getLevel());
@@ -49,9 +49,9 @@ public class MediaStateDataComparator implements StateDataComparator<StateData> 
         return result;
     }
 
-    private static PlayerInfo makeNewCopy(ConnectedNode conectedNode,
+    private static PlayerInfo makeNewCopy(Node conectedNode,
             PlayerInfo player) {
-        PlayerInfo result = conectedNode.getTopicMessageFactory().newFromType(PlayerInfo._TYPE);
+        PlayerInfo result = new PlayerInfo(); //conectedNode.getTopicMessageFactory().newFromType(PlayerInfo._TYPE);
         if (player != null) {
             result.setCanseek(player.getCanseek());
             result.setFile(player.getFile());
@@ -68,9 +68,9 @@ public class MediaStateDataComparator implements StateDataComparator<StateData> 
         return result;
     }
 
-    private static MonitorInfo makeNewCopy(ConnectedNode conectedNode,
+    private static MonitorInfo makeNewCopy(Node conectedNode,
             MonitorInfo monitor) {
-        MonitorInfo result = conectedNode.getTopicMessageFactory().newFromType(MonitorInfo._TYPE);
+        MonitorInfo result = new MonitorInfo(); //conectedNode.getTopicMessageFactory().newFromType(MonitorInfo._TYPE);
         if (monitor != null) {
             result.setHeight(monitor.getHeight());
             result.setWigth(monitor.getWigth());

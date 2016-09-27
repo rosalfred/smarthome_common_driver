@@ -1,13 +1,15 @@
 package org.rosbuilding.common;
 
-import org.ros.dynamic_reconfigure.server.BaseConfig;
-import org.ros.node.ConnectedNode;
+//import org.ros.dynamic_reconfigure.server.BaseConfig;
+import org.ros2.rcljava.node.Node;
 
-public abstract class NodeConfig extends BaseConfig {
+
+public abstract class NodeConfig {
+//	extends BaseConfig {
 
     public static final String RATE = "rate";
 
-    protected final ConnectedNode connectedNode;
+    protected final Node connectedNode;
 
     // Parameters
     private String prefix;
@@ -22,12 +24,12 @@ public abstract class NodeConfig extends BaseConfig {
      * @param defaultFixedFrame
      * @param defaultRate
      */
-    protected NodeConfig(ConnectedNode connectedNode,
+    protected NodeConfig(Node connectedNode,
             String defaultPrefix, String defaultFixedFrame, int defaultRate) {
-        super(connectedNode);
+//        super(connectedNode);
 
         this.connectedNode = connectedNode;
-        this.addField(RATE, "int", 0, "rate processus", 1, 0, 200);
+//        this.addField(RATE, "int", 0, "rate processus", 1, 0, 200);
 
         this.prefix = defaultPrefix;
         this.fixedFrame = defaultFixedFrame;
@@ -37,14 +39,14 @@ public abstract class NodeConfig extends BaseConfig {
     protected void loadParameters() {
         //this.logI("Load parameters.");
 
-        this.prefix = String.format("/%s/", this.connectedNode.getParameterTree()
-                .getString("~tf_prefix", this.prefix));
-        this.fixedFrame = this.connectedNode.getParameterTree()
-                .getString("~fixed_frame", this.fixedFrame);
-        this.rate = this.connectedNode.getParameterTree()
-                .getInteger("~" + RATE, this.rate);
-        this.mac = this.connectedNode.getParameterTree()
-                .getString("~mac", "00:00:00:00:00:00");
+//        this.prefix = String.format("/%s/", this.connectedNode.getParameterTree()
+//                .getString("~tf_prefix", this.prefix));
+//        this.fixedFrame = this.connectedNode.getParameterTree()
+//                .getString("~fixed_frame", this.fixedFrame);
+//        this.rate = this.connectedNode.getParameterTree()
+//                .getInteger("~" + RATE, this.rate);
+//        this.mac = this.connectedNode.getParameterTree()
+//                .getString("~mac", "00:00:00:00:00:00");
 
         if (this.rate <= 0) {
             this.rate = 1;

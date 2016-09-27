@@ -1,6 +1,6 @@
 package org.rosbuilding.common;
 
-import org.ros.internal.message.Message;
+import org.ros2.rcljava.internal.message.Message;
 
 public interface INode<TStateData> {
     <T extends Message> T getNewMessageInstance(String type);

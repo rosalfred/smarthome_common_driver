@@ -10,8 +10,8 @@ package org.rosbuilding.common.media;
 
 import org.rosbuilding.common.IModule;
 
-import smarthome_media_msgs.MediaAction;
-import smarthome_media_msgs.StateData;
+import smarthome_media_msgs.msg.MediaAction;
+import smarthome_media_msgs.msg.StateData;
 
 /**
  *

@@ -3,20 +3,19 @@ package org.rosbuilding.common.media;
 import java.util.Arrays;
 import java.util.List;
 
-import smarthome_media_msgs.MediaAction;
-import smarthome_comm_msgs.Command;
+import smarthome_media_msgs.msg.MediaAction;
+import smarthome_comm_msgs.msg.Command;
 
-import org.ros.node.ConnectedNode;
+import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.IModule;
 import org.rosbuilding.common.MessageConverter;
 
 public class MediaMessageConverter implements MessageConverter<MediaAction> {
-    public MediaAction toMessage(ConnectedNode node, Command command) {
+    public MediaAction toMessage(Node node, Command command) {
         MediaAction mediaAction = null;
 
         if (node != null) {
-            mediaAction = node.getTopicMessageFactory()
-                    .newFromType(MediaAction._TYPE);
+            mediaAction = new MediaAction();
 
             String[] action = command.getAction().split(IModule.SEP);
 

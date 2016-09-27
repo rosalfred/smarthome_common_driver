@@ -10,10 +10,9 @@ package org.rosbuilding.common.media;
 
 import org.rosbuilding.common.IModule;
 
-import smarthome_media_msgs.MediaAction;
-import smarthome_media_msgs.StateData;
-import smarthome_media_msgs.ToggleMuteSpeakerRequest;
-import smarthome_media_msgs.ToggleMuteSpeakerResponse;
+import smarthome_media_msgs.msg.MediaAction;
+import smarthome_media_msgs.msg.StateData;
+import smarthome_media_msgs.srv.ToggleMuteSpeaker;
 
 /**
  *
@@ -37,6 +36,6 @@ public interface ISpeaker extends IModule<StateData, MediaAction> {
      * @param request
      * @param response
      */
-    void handleSpeakerMuteToggle(ToggleMuteSpeakerRequest request,
-            ToggleMuteSpeakerResponse response);
+    void handleSpeakerMuteToggle(ToggleMuteSpeaker.Request request,
+            ToggleMuteSpeaker.Response response);
 }

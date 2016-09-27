@@ -8,7 +8,7 @@
  */
 package org.rosbuilding.common;
 
-import org.ros.internal.message.Message;
+import org.ros2.rcljava.internal.message.Message;
 
 /**
  *

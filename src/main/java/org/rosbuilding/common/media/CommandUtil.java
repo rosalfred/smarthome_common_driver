@@ -12,13 +12,13 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ros.node.ConnectedNode;
+import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.IModule;
 
 import com.google.common.base.Joiner;
 
-import smarthome_media_msgs.MediaAction;
-import smarthome_comm_msgs.Command;
+import smarthome_media_msgs.msg.MediaAction;
+import smarthome_comm_msgs.msg.Command;
 
 /**
  *
@@ -42,12 +42,11 @@ public class CommandUtil {
         }
     }
 
-    public static MediaAction toMediaAction(ConnectedNode node, Command command) {
+    public static MediaAction toMediaAction(Node node, Command command) {
         MediaAction mediaAction = null;
 
         if (node != null) {
-            mediaAction = node.getTopicMessageFactory()
-                    .newFromType(MediaAction._TYPE);
+            mediaAction = new MediaAction(); //node.getTopicMessageFactory().newFromType(MediaAction._TYPE);
 
             String[] action = command.getAction().split(IModule.SEP);
 
@@ -72,11 +71,11 @@ public class CommandUtil {
         return mediaAction;
     }
 
-    public static Command toCommand(ConnectedNode node, MediaAction mediaAction) {
+    public static Command toCommand(Node node, MediaAction mediaAction) {
         Command command = null;
 
         if (node != null) {
-            command = node.getTopicMessageFactory().newFromType(Command._TYPE);
+            command = new Command(); //node.getTopicMessageFactory().newFromType(Command._TYPE);
             command.setAction(mediaAction.getType() + IModule.SEP + mediaAction.getMethod());
             command.setSubject(mediaAction.getUri());
         }
@@ -84,11 +83,11 @@ public class CommandUtil {
         return command;
     }
 
-    public static Command toCommand(ConnectedNode node, String iplayer, URI uri, String type) {
+    public static Command toCommand(Node node, String iplayer, URI uri, String type) {
         Command command = null;
 
         if (node != null) {
-            command = node.getTopicMessageFactory().newFromType(Command._TYPE);
+            command = new Command(); //node.getTopicMessageFactory().newFromType(Command._TYPE);
             command.setAction(type + IModule.SEP + iplayer);
             command.setSubject(uri.toString());
         }
@@ -96,9 +95,8 @@ public class CommandUtil {
         return command;
     }
 
-    public static Command toCommand(ConnectedNode node, String iplayer, String...data) {
-        Command command = node.getTopicMessageFactory()
-                .newFromType(Command._TYPE);
+    public static Command toCommand(Node node, String iplayer, String...data) {
+        Command command = new Command(); //node.getTopicMessageFactory().newFromType(Command._TYPE);
 
         command.setAction(IModule.SEP + iplayer);
         command.setSubject(IModule.URI_DATA + Joiner.on(IModule.SEP).join(data));

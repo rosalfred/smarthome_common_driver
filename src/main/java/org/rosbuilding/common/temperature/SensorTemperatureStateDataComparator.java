@@ -1,11 +1,10 @@
 package org.rosbuilding.common.temperature;
 
-import sensor_msgs.Temperature;
+import sensor_msgs.msg.Temperature;
+import smarthome_heater_msgs.msg.SensorTemperatureStateData;
 
-import org.ros.node.ConnectedNode;
+import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.StateDataComparator;
-
-import smarthome_heater_msgs.SensorTemperatureStateData;
 
 public class SensorTemperatureStateDataComparator implements StateDataComparator<SensorTemperatureStateData> {
 
@@ -25,11 +24,10 @@ public class SensorTemperatureStateDataComparator implements StateDataComparator
     }
 
     @Override
-    public SensorTemperatureStateData makeNewCopy(ConnectedNode connectedNode, String frameId,
+    public SensorTemperatureStateData makeNewCopy(Node connectedNode, String frameId,
             SensorTemperatureStateData stateData) {
-        SensorTemperatureStateData result = connectedNode.getTopicMessageFactory()
-                .newFromType(SensorTemperatureStateData._TYPE);
-        result.getHeader().setFrameId(frameId);
+        SensorTemperatureStateData result = new SensorTemperatureStateData(); //connectedNode.getTopicMessageFactory().newFromType(SensorTemperatureStateData._TYPE);
+//        result.getHeader().setFrameId(frameId); // Remove on ROS2
         result.getHeader().setStamp(connectedNode.getCurrentTime());
         result.setState(stateData.getState());
         result.setTemperatureAmbiant(makeNewCopy(connectedNode, frameId, stateData.getTemperatureAmbiant()));
@@ -39,15 +37,14 @@ public class SensorTemperatureStateDataComparator implements StateDataComparator
     }
 
     public static Temperature makeNewCopy(
-            ConnectedNode connectedNode,
+            Node connectedNode,
             String frameId,
             Temperature temperature) {
 
-        Temperature result = connectedNode.getTopicMessageFactory()
-                .newFromType(Temperature._TYPE);
+        Temperature result = new Temperature(); // connectedNode.getTopicMessageFactory().newFromType(Temperature._TYPE);
 
         result.getHeader().setStamp(connectedNode.getCurrentTime());
-        result.getHeader().setFrameId(frameId);
+//        result.getHeader().setFrameId(frameId); // Remove on ROS2
         result.setTemperature(temperature.getTemperature());
         result.setVariance(temperature.getVariance());
 

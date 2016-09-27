@@ -11,38 +11,30 @@ package org.rosbuilding.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ros.concurrent.CancellableLoop;
-import org.ros.dynamic_reconfigure.server.Server;
-import org.ros.dynamic_reconfigure.server.Server.ReconfigureListener;
-import org.ros.internal.message.Message;
-import org.ros.message.MessageListener;
-import org.ros.namespace.GraphName;
-import org.ros.node.AbstractNodeMain;
-import org.ros.node.ConnectedNode;
-import org.ros.node.Node;
-import org.ros.node.topic.Publisher;
-import org.ros.node.topic.Subscriber;
-import org.rosbuilding.zeroconf.DiscoveredService;
-import org.rosbuilding.zeroconf.NodeConfiguration;
-import org.rosbuilding.zeroconf.NodeConfiguration.NodeCapability;
-import org.rosbuilding.zeroconf.Zeroconf;
+import org.ros2.rcljava.internal.message.Message;
+import org.ros2.rcljava.namespace.GraphName;
+import org.ros2.rcljava.node.Node;
+import org.ros2.rcljava.node.topic.Consumer;
+import org.ros2.rcljava.node.topic.Publisher;
+import org.ros2.rcljava.node.topic.Subscription;
 
 import com.google.common.base.Strings;
 
-import smarthome_media_msgs.StateData;
-import smarthome_comm_msgs.Command;
+import smarthome_media_msgs.msg.StateData;
+import smarthome_comm_msgs.msg.Command;
 
 /**
  *
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ * @author Mickael Gaillard <mick.gaillard@gmail.com>
  *
- * BaseNodeMain<TConfiguration extends NodeConfig,
-        TStateData extends Message, TMessage extends Message>
+ * BaseNodeMain<TConfiguration extends NodeConfig, TStateData extends Message, TMessage extends Message>
  */
 public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
         TStateData extends Message, TMessage extends Message>
-        extends AbstractNodeMain
-        implements ReconfigureListener<TConfiguration>, INode<TStateData> {
+//        extends AbstractNodeMain
+//        implements ReconfigureListener<TConfiguration>, INode<TStateData>
+{
 
     // Constants
     public static final String PUB_WOL      = "/wol";
@@ -52,7 +44,7 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
 
     // Fields
     private boolean isConnected = false;
-    private ConnectedNode connectedNode;
+    private Node connectedNode;
     private TStateData stateData;
     private TStateData oldStateData;
 
@@ -60,9 +52,9 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
     private List<IModule<TStateData, TMessage>> modules = new ArrayList<>();
 
     // Topics
-    private Server<TConfiguration> serverReconfig;
+//    private Server<TConfiguration> serverReconfig; // Native on ROS2
     private Publisher<TStateData> pubStateData;
-    private Publisher<std_msgs.String> pubWol;
+    private Publisher<std_msgs.msg.String> pubWol;
 
     private final StateDataComparator<TStateData> comparator;
     private final MessageConverter<TMessage> converter;
@@ -71,13 +63,14 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
     public TConfiguration configuration; //TODO make private
     private final String nodeName;
 
-    private Thread threadZeroconf = null;
+//    private Thread threadZeroconf = null; // Native on ROS2
 
     protected BaseNodeMain(
             String nodeName,
             StateDataComparator<TStateData> comparator,
             MessageConverter<TMessage> converter,
             String messageType, String stateDataType) {
+
         this.nodeName = nodeName;
         this.comparator = comparator;
         this.converter = converter;
@@ -93,22 +86,42 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
     /**
      * Load parameters of launcher
      */
-    protected void loadParameters() {
-        this.serverReconfig = new Server<TConfiguration>(
-                this.getConnectedNode(),
-                this.configuration,
-                this);
+    protected void loadParameters() { // Native on ROS2
+//        this.serverReconfig = new Server<TConfiguration>(
+//                this.getConnectedNode(),
+//                this.configuration,
+//                this);
     }
 
     protected abstract void onConnected();
     protected abstract void onDisconnected();
 
     public final TMessage getNewMessageInstance() {
-        return getNewMessageInstance(this.messageType);
+        return this.getNewMessageInstance(this.messageType);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Message> T getNewMessageInstance(String type) {
-        return this.getConnectedNode().getTopicMessageFactory().newFromType(type);
+        T obj = null;
+        try {
+            Class<?> ref = Class.forName(type);
+            obj = (T) ref.newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return obj;
+    }
+
+    public static Class<?> makeClass(String type) {
+        Class<?> ref = null;
+        try {
+            ref = Class.forName(type);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return ref;
     }
 
     public final TStateData getStateData() {
@@ -190,26 +203,24 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
      * Initialize all node publishers & subscribers Topics.
      */
     protected void initTopics() {
-        this.pubWol = this.connectedNode.newPublisher(
-                PUB_WOL,
-                std_msgs.String._TYPE);
+        this.pubWol = this.connectedNode.createPublisher(std_msgs.msg.String.class, PUB_WOL);
 
         if (!Strings.isNullOrEmpty(this.stateDataType)) {
-            this.pubStateData = this.connectedNode.newPublisher(
-                    this.configuration.getPrefix() + PUB_STATE,
-                    this.stateDataType);
-            this.pubStateData.setLatchMode(true);
+            this.pubStateData = this.connectedNode.createPublisher(
+                    (Class<TStateData>)makeClass(this.stateDataType),
+                    this.configuration.getPrefix() + PUB_STATE
+                    );
+//            this.pubStateData.setLatchMode(true);
         }
 
         if (!Strings.isNullOrEmpty(this.messageType)) {
             // Local topic (mapped by prefix and namespace)
-            Subscriber<TMessage> messageSubscriber = this.connectedNode.newSubscriber(
+            Subscription<TMessage> messageSubscriber = this.connectedNode.createSubscription(
+                    (Class<TMessage>)makeClass(this.messageType),
                     this.configuration.getPrefix() + SUB_CMD,
-                    this.messageType);
-
-            messageSubscriber.addMessageListener(new MessageListener<TMessage>() {
+                    new Consumer<TMessage>() {
                 @Override
-                public void onNewMessage(TMessage msg) {
+                public void accept(TMessage msg) {
                     BaseNodeMain.this.onNewMessage(msg);
                 }
             });
@@ -217,13 +228,12 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
 
         if (this.converter != null) {
             // Global topic registration (no prefix...)
-            Subscriber<Command> commandSubscriber = this.connectedNode.newSubscriber(
+            Subscription<Command> commandSubscriber = this.connectedNode.createSubscription(
+                    Command.class,
                     "/" + SUB_STATE_ROBOT,
-                    Command._TYPE);
-
-            commandSubscriber.addMessageListener(new MessageListener<Command>() {
+                    new Consumer<Command>() {
                 @Override
-                public void onNewMessage(Command msg) {
+                public void accept(Command msg) {
                     BaseNodeMain.this.onNewMessage(msg);
                 }
             });
@@ -241,47 +251,48 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
     protected void initSubscribers() { }
     protected void initPublishers() { }
 
-    public final ConnectedNode getConnectedNode() {
+    public final Node getConnectedNode() {
         return this.connectedNode;
     }
 
-    @Override
+//    @Override
     public GraphName getDefaultNodeName() {
-        return GraphName.of(this.nodeName);
+        return null; //GraphName.of(this.nodeName);
     }
 
-    @Override
-    public void onStart(final ConnectedNode connectedNode) {
-        super.onStart(connectedNode);
-        this.connectedNode = connectedNode;
-
-        this.configuration = this.getConfig();
-        this.configuration.loadParameters();
+//    @Override
+    public void onStart(final Node connectedNode) {
+//        super.onStart(connectedNode);
+//        this.connectedNode = connectedNode;
+//
+//        this.configuration = this.getConfig();
+//        this.configuration.loadParameters();
 
         this.logI(String.format("Start %s node...", this.nodeName));
     }
 
-    @Override
+//    @Override
     public void onShutdown(Node node) {
         this.logI("Stop node !");
 
-        if (this.serverReconfig != null)
-            this.serverReconfig.close();
-
-        if (this.threadZeroconf != null && this.threadZeroconf.isAlive()) {
-            this.threadZeroconf.interrupt();
-        }
-
-        super.onShutdown(node);
-        this.connectedNode = null;
+     // Native on ROS2
+//        if (this.serverReconfig != null)
+//            this.serverReconfig.close();
+//
+//        if (this.threadZeroconf != null && this.threadZeroconf.isAlive()) {
+//            this.threadZeroconf.interrupt();
+//        }
+//
+//        super.onShutdown(node);
+//        this.connectedNode = null;
     }
 
     /**
      * On node error is throw.
      */
-    @Override
+//    @Override
     public void onError(Node node, Throwable throwable) {
-        super.onError(node, throwable);
+//        super.onError(node, throwable);
         this.logE(throwable.getMessage());
     }
 
@@ -290,12 +301,12 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
 
         // This CancellableLoop will be canceled automatically when the node
         // shuts down.
-        this.connectedNode.executeCancellableLoop(new CancellableLoop() {
-            @Override
-            protected void loop() throws InterruptedException {
-                refreshStateData();
-            }
-        });
+//        this.connectedNode.executeCancellableLoop(new CancellableLoop() {
+//            @Override
+//            protected void loop() throws InterruptedException {
+//                refreshStateData();
+//            }
+//        });
     }
 
     /**
@@ -310,63 +321,64 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
         this.initTopics();
         this.initServices();
 
-        this.publishZeroConf();
+//        this.publishZeroConf(); // Native on ROS2
 
-        this.stateData = this.pubStateData.newMessage();
+        this.stateData = this.getNewMessageInstance(this.stateDataType);
+                //this.pubStateData.newMessage();
     }
 
     public final void wakeOnLan() {
-        std_msgs.String message = this.connectedNode.getTopicMessageFactory()
-                .newFromType(std_msgs.String._TYPE);
+        std_msgs.msg.String message = new std_msgs.msg.String();
         message.setData(this.configuration.getMac());
 
         this.pubWol.publish(message);
     }
 
-    private void publishZeroConf() {
-        final Zeroconf publisher = new Zeroconf();
-
-        final DiscoveredService service = this.getConfiguration().toDiscoveredService();
-
-        service.name = this.nodeName;
-        service.type = "_ros-node._tcp";
-        service.domain = "local";
-        service.port = 8888;
-
-        this.threadZeroconf = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                publisher.addService(service);
-            }
-        });
-
-        this.threadZeroconf.start();
-    }
+// Native on ROS2
+//    private void publishZeroConf() {
+//        final Zeroconf publisher = new Zeroconf();
+//
+//        final DiscoveredService service = this.getConfiguration().toDiscoveredService();
+//
+//        service.name = this.nodeName;
+//        service.type = "_ros-node._tcp";
+//        service.domain = "local";
+//        service.port = 8888;
+//
+//        this.threadZeroconf = new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                publisher.addService(service);
+//            }
+//        });
+//
+//        this.threadZeroconf.start();
+//    }
 
     protected abstract TConfiguration getConfig();
 
-    protected NodeConfiguration getConfiguration() {
-        NodeConfiguration configuration = new NodeConfiguration();
-        configuration.setMasterAddress(this.connectedNode.getMasterUri().getHost());
-        configuration.setNodePath(this.configuration.getPrefix().substring(
-                0, this.configuration.getPrefix().length() - 1));
-        configuration.setNodeType(this.getClass().getName());
+//    protected NodeConfiguration getConfiguration() {
+//        NodeConfiguration configuration = new NodeConfiguration();
+//        configuration.setMasterAddress(this.connectedNode.getMasterUri().getHost());
+//        configuration.setNodePath(this.configuration.getPrefix().substring(
+//                0, this.configuration.getPrefix().length() - 1));
+//        configuration.setNodeType(this.getClass().getName());
+//
+//        NodeConfiguration.NodePermission permission =
+//                new NodeConfiguration.NodePermission();
+//        permission.setExclude(true);
+//        permission.setName("Permission");
+//        configuration.getPermissions().add(permission);
+//        configuration.getCapabilities().add(NodeCapability.ALL);
+//
+//        return configuration;
+//    }
 
-        NodeConfiguration.NodePermission permission =
-                new NodeConfiguration.NodePermission();
-        permission.setExclude(true);
-        permission.setName("Permission");
-        configuration.getPermissions().add(permission);
-        configuration.getCapabilities().add(NodeCapability.ALL);
-
-        return configuration;
-    }
-
-    @Override
+//    @Override
     public TConfiguration onReconfigure(TConfiguration config, int level) {
-        this.configuration.setRate(
-                config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
+//        this.configuration.setRate(
+//                config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
 
         return config;
     }

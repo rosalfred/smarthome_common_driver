@@ -10,9 +10,7 @@ package org.rosbuilding.common;
 
 import java.io.IOException;
 
-import smarthome_media_msgs.StateData;
-
-import org.ros.internal.message.Message;
+import org.ros2.rcljava.internal.message.Message;
 
 /**
  *

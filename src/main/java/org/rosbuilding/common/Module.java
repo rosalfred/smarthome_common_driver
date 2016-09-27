@@ -2,7 +2,8 @@ package org.rosbuilding.common;
 
 import java.io.IOException;
 
-import org.ros.internal.message.Message;
+import org.ros2.rcljava.internal.message.Message;
+
 
 public class Module<T extends Message, V extends Message> implements IModule<T, V> {
 
