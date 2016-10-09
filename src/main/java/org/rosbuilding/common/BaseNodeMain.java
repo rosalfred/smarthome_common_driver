@@ -11,6 +11,7 @@ package org.rosbuilding.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ros2.rcljava.RCLJava;
 import org.ros2.rcljava.internal.message.Message;
 import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
@@ -30,8 +31,10 @@ import smarthome_comm_msgs.msg.Command;
  *
  * BaseNodeMain<TConfiguration extends NodeConfig, TStateData extends Message, TMessage extends Message>
  */
-public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
-        TStateData extends Message, TMessage extends Message>
+public abstract class BaseNodeMain<
+        TConfiguration extends NodeConfig,
+        TStateData extends Message,
+        TMessage extends Message>
 //        extends AbstractNodeMain
 //        implements ReconfigureListener<TConfiguration>, INode<TStateData>
 {
@@ -69,7 +72,8 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
             String nodeName,
             StateDataComparator<TStateData> comparator,
             MessageConverter<TMessage> converter,
-            String messageType, String stateDataType) {
+            String messageType,
+            String stateDataType) {
 
         this.nodeName = nodeName;
         this.comparator = comparator;
@@ -263,10 +267,10 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
 //    @Override
     public void onStart(final Node connectedNode) {
 //        super.onStart(connectedNode);
-//        this.connectedNode = connectedNode;
+        this.connectedNode = connectedNode;
 //
-//        this.configuration = this.getConfig();
-//        this.configuration.loadParameters();
+        this.configuration = this.getConfig();
+        this.configuration.loadParameters();
 
         this.logI(String.format("Start %s node...", this.nodeName));
     }
@@ -307,6 +311,16 @@ public abstract class BaseNodeMain<TConfiguration extends NodeConfig,
 //                refreshStateData();
 //            }
 //        });
+
+        while(RCLJava.ok()) {
+            RCLJava.spinOnce(this.connectedNode);
+            try {
+                this.refreshStateData();
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
+
     }
 
     /**

@@ -8,8 +8,10 @@
  */
 package org.rosbuilding.common.media;
 
-import smarthome_media_msgs.srv.MediaGetItem;
-import smarthome_media_msgs.srv.MediaGetItems;
+import smarthome_media_msgs.srv.MediaGetItem_Request;
+import smarthome_media_msgs.srv.MediaGetItem_Response;
+import smarthome_media_msgs.srv.MediaGetItems_Request;
+import smarthome_media_msgs.srv.MediaGetItems_Response;
 
 /**
  *
@@ -17,18 +19,18 @@ import smarthome_media_msgs.srv.MediaGetItems;
  *
  */
 public interface ILibrary {
-	/**
-	 * Method callback for get_item.
-	 * @param request {@link MediaGetItemRequest}
-	 * @param response {@link MediaGetItemResponse}
-	 */
-	void handleMediaGetItem(MediaGetItem.Request request,
-			MediaGetItem.Response response);
-	/**
-	 * Method callback for get_items.
-	 * @param request {@link MediaGetItemsRequest}
-	 * @param response {@link MediaGetItemsResponse}
-	 */
-	void handleMediaGetItems(MediaGetItems.Request request,
-			MediaGetItems.Response response);
+    /**
+     * Method callback for get_item.
+     * @param request {@link MediaGetItem_Request}
+     * @param response {@link MediaGetItem_Response}
+     */
+    void handleMediaGetItem(MediaGetItem_Request request,
+            MediaGetItem_Response response);
+    /**
+     * Method callback for get_items.
+     * @param request {@link MediaGetItems_Request}
+     * @param response {@link MediaGetItems_Response}
+     */
+    void handleMediaGetItems(MediaGetItems_Request request,
+            MediaGetItems_Response response);
 }

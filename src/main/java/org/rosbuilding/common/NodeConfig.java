@@ -24,8 +24,11 @@ public abstract class NodeConfig {
      * @param defaultFixedFrame
      * @param defaultRate
      */
-    protected NodeConfig(Node connectedNode,
-            String defaultPrefix, String defaultFixedFrame, int defaultRate) {
+    protected NodeConfig(
+            Node connectedNode,
+            String defaultPrefix,
+            String defaultFixedFrame,
+            int defaultRate) {
 //        super(connectedNode);
 
         this.connectedNode = connectedNode;
