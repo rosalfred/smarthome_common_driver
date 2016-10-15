@@ -9,6 +9,8 @@ import std_msgs.msg.Header;
 import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.StateDataComparator;
 
+import com.google.common.base.Strings;
+
 public class MediaStateDataComparator implements StateDataComparator<StateData> {
 
     @Override
