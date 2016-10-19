@@ -158,7 +158,7 @@ public abstract class BaseNodeMain<
             this.isConnected = this.connect();
         }
 
-        if (!this.comparator.isEquals(this.stateData, this.oldStateData)) {
+        if (this.comparator != null && !this.comparator.isEquals(this.stateData, this.oldStateData)) {
             TStateData stateDataNew = this.comparator.makeNewCopy(
                     this.connectedNode,
                     this.configuration.getFixedFrame(),
