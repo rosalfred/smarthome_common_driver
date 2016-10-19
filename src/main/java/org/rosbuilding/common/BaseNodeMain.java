@@ -66,6 +66,7 @@ public abstract class BaseNodeMain<
     public TConfiguration configuration; //TODO make private
     private final String nodeName;
 
+    private Thread th;
 //    private Thread threadZeroconf = null; // Native on ROS2
 
     protected BaseNodeMain(
@@ -278,6 +279,7 @@ public abstract class BaseNodeMain<
 //    @Override
     public void onShutdown(Node node) {
         this.logI("Stop node !");
+        this.th.interrupt();
 
      // Native on ROS2
 //        if (this.serverReconfig != null)
@@ -312,14 +314,20 @@ public abstract class BaseNodeMain<
 //            }
 //        });
 
-        while(RCLJava.ok()) {
-            RCLJava.spinOnce(this.connectedNode);
-            try {
-                this.refreshStateData();
-            } catch (InterruptedException e) {
-                break;
+        this.th = new Thread(new Runnable() {
+
+            @Override
+            public void run()  {
+                while(true) {
+                    try {
+                        refreshStateData();
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
             }
-        }
+        });
+        this.th.start();
 
     }
 
