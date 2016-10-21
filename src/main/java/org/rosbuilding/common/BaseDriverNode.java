@@ -11,9 +11,7 @@ package org.rosbuilding.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ros2.rcljava.RCLJava;
 import org.ros2.rcljava.internal.message.Message;
-import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 import org.ros2.rcljava.node.topic.Consumer;
 import org.ros2.rcljava.node.topic.Publisher;
@@ -31,11 +29,11 @@ import smarthome_comm_msgs.msg.Command;
  *
  * BaseNodeMain<TConfiguration extends NodeConfig, TStateData extends Message, TMessage extends Message>
  */
-public abstract class BaseNodeMain<
+public abstract class BaseDriverNode<
         TConfiguration extends NodeConfig,
         TStateData extends Message,
         TMessage extends Message>
-//        extends AbstractNodeMain
+        extends BaseSimpleNode<TConfiguration>
 //        implements ReconfigureListener<TConfiguration>, INode<TStateData>
 {
 
@@ -47,7 +45,6 @@ public abstract class BaseNodeMain<
 
     // Fields
     private boolean isConnected = false;
-    private Node connectedNode;
     private TStateData stateData;
     private TStateData oldStateData;
 
@@ -63,20 +60,18 @@ public abstract class BaseNodeMain<
     private final MessageConverter<TMessage> converter;
     private final String messageType;
     private final String stateDataType;
-    public TConfiguration configuration; //TODO make private
-    private final String nodeName;
 
     private Thread th;
 //    private Thread threadZeroconf = null; // Native on ROS2
 
-    protected BaseNodeMain(
+    protected BaseDriverNode(
             String nodeName,
             StateDataComparator<TStateData> comparator,
             MessageConverter<TMessage> converter,
             String messageType,
             String stateDataType) {
+        super(nodeName);
 
-        this.nodeName = nodeName;
         this.comparator = comparator;
         this.converter = converter;
         this.messageType = messageType;
@@ -87,16 +82,6 @@ public abstract class BaseNodeMain<
      * Connect to object
      */
     protected abstract boolean connect();
-
-    /**
-     * Load parameters of launcher
-     */
-    protected void loadParameters() { // Native on ROS2
-//        this.serverReconfig = new Server<TConfiguration>(
-//                this.getConnectedNode(),
-//                this.configuration,
-//                this);
-    }
 
     protected abstract void onConnected();
     protected abstract void onDisconnected();
@@ -226,7 +211,7 @@ public abstract class BaseNodeMain<
                     new Consumer<TMessage>() {
                 @Override
                 public void accept(TMessage msg) {
-                    BaseNodeMain.this.onNewMessage(msg);
+                    BaseDriverNode.this.onNewMessage(msg);
                 }
             });
         }
@@ -239,7 +224,7 @@ public abstract class BaseNodeMain<
                     new Consumer<Command>() {
                 @Override
                 public void accept(Command msg) {
-                    BaseNodeMain.this.onNewMessage(msg);
+                    BaseDriverNode.this.onNewMessage(msg);
                 }
             });
         }
@@ -248,37 +233,8 @@ public abstract class BaseNodeMain<
         this.initPublishers();
     }
 
-    /**
-     * Initialize all node services.
-     */
-    protected void initServices() { }
-
-    protected void initSubscribers() { }
-    protected void initPublishers() { }
-
-    public final Node getConnectedNode() {
-        return this.connectedNode;
-    }
-
-//    @Override
-    public GraphName getDefaultNodeName() {
-        return null; //GraphName.of(this.nodeName);
-    }
-
-//    @Override
-    public void onStart(final Node connectedNode) {
-//        super.onStart(connectedNode);
-        this.connectedNode = connectedNode;
-//
-        this.configuration = this.getConfig();
-        this.configuration.loadParameters();
-
-        this.logI(String.format("Start %s node...", this.nodeName));
-    }
-
-//    @Override
+    @Override
     public void onShutdown(Node node) {
-        this.logI("Stop node !");
         this.th.interrupt();
 
      // Native on ROS2
@@ -288,17 +244,13 @@ public abstract class BaseNodeMain<
 //        if (this.threadZeroconf != null && this.threadZeroconf.isAlive()) {
 //            this.threadZeroconf.interrupt();
 //        }
-//
-//        super.onShutdown(node);
-//        this.connectedNode = null;
+
+        super.onShutdown(node);
     }
 
-    /**
-     * On node error is throw.
-     */
-//    @Override
+    @Override
     public void onError(Node node, Throwable throwable) {
-//        super.onError(node, throwable);
+        super.onError(node, throwable);
         this.logE(throwable.getMessage());
     }
 
@@ -378,8 +330,6 @@ public abstract class BaseNodeMain<
 //        this.threadZeroconf.start();
 //    }
 
-    protected abstract TConfiguration getConfig();
-
 //    protected NodeConfiguration getConfiguration() {
 //        NodeConfiguration configuration = new NodeConfiguration();
 //        configuration.setMasterAddress(this.connectedNode.getMasterUri().getHost());
@@ -397,7 +347,7 @@ public abstract class BaseNodeMain<
 //        return configuration;
 //    }
 
-//    @Override
+    @Override
     public TConfiguration onReconfigure(TConfiguration config, int level) {
 //        this.configuration.setRate(
 //                config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
@@ -407,38 +357,5 @@ public abstract class BaseNodeMain<
 
     public StateDataComparator<TStateData> getComparator() {
         return this.comparator;
-    }
-
-    // Log assessors
-    /**
-     * Log a message with debug log level.
-     * @param message this message
-     */
-    public void logD(final Object message) {
-        this.connectedNode.getLog().debug(message);
-    }
-
-    /**
-     * Log a message with info log level.
-     * @param message this message
-     */
-    public void logI(final Object message) {
-        this.connectedNode.getLog().info(message);
-    }
-
-    /**
-     * Log a message with error log level.
-     * @param message this message
-     */
-    public void logE(final Object message) {
-        this.connectedNode.getLog().error(message);
-    }
-
-    /**
-     * Log a message with error log level.
-     * @param message this message
-     */
-    public void logE(final Exception message) {
-        this.connectedNode.getLog().error(message.getStackTrace());
     }
 }
