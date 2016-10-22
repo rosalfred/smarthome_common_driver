@@ -9,9 +9,7 @@ import std_msgs.msg.Header;
 import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.StateDataComparator;
 
-import com.google.common.base.Strings;
-
-public class MediaStateDataComparator implements StateDataComparator<StateData> {
+public class MediaStateDataComparator extends StateDataComparator<StateData> {
 
     @Override
     public boolean isEquals(StateData state1, StateData state2) {
@@ -104,11 +102,11 @@ public class MediaStateDataComparator implements StateDataComparator<StateData> 
             result &= player1.getMediaid() == player2.getMediaid();
             result &= player1.getMediatype().getValue().equals(player2.getMediatype().getValue());
             result &= player1.getSpeed() == player2.getSpeed();
-            result &= player1.getStamp().equals(player2.getStamp());
+            result &= isEqual(player1.getStamp(), player2.getStamp());
             result &= player1.getState() == player2.getState();
             result &= player1.getThumbnail().equals(player2.getThumbnail());
             result &= player1.getTitle().equals(player2.getTitle());
-            result &= player1.getTotaltime().equals(player2.getTotaltime());
+            result &= isEqual(player1.getTotaltime(), player2.getTotaltime());
         }
         return result;
     }

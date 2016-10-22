@@ -6,7 +6,7 @@ import smarthome_heater_msgs.msg.SensorTemperatureStateData;
 import org.ros2.rcljava.node.Node;
 import org.rosbuilding.common.StateDataComparator;
 
-public class SensorTemperatureStateDataComparator implements StateDataComparator<SensorTemperatureStateData> {
+public class SensorTemperatureStateDataComparator extends StateDataComparator<SensorTemperatureStateData> {
 
     @Override
     public boolean isEquals(SensorTemperatureStateData state1, SensorTemperatureStateData state2) {
