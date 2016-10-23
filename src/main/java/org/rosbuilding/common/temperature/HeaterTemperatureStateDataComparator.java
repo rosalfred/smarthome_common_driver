@@ -8,27 +8,18 @@ import org.rosbuilding.common.StateDataComparator;
 import smarthome_heater_msgs.msg.HeatingStateData;
 import smarthome_heater_msgs.msg.HeatingTemperatureSlot;
 
-public class HeaterTemperatureStateDataComparator implements StateDataComparator<HeatingStateData> {
+public class HeaterTemperatureStateDataComparator extends StateDataComparator<HeatingStateData> {
 
     @Override
     public boolean isEquals(HeatingStateData stateData1, HeatingStateData stateData2) {
         boolean result = (stateData1 == null && stateData2 == null)
                 || (stateData1 != null && stateData2 != null
-                        && stateData1.getProportional()
-                                == stateData2.getProportional()
-                        && stateData1.getIntegral()
-                                == stateData2.getIntegral()
-                        && stateData1.getDerivative()
-                                == stateData2.getDerivative()
-                        && isEquals(
-                                stateData1.getTemperatureGoal(),
-                                stateData2.getTemperatureGoal())
-                        && isEquals(
-                                stateData1.getTemperatureReal(),
-                                stateData2.getTemperatureReal())
-                        && isEquals(
-                                stateData1.getTimeSlotCurrent(),
-                                stateData2.getTimeSlotCurrent()));
+                        && stateData1.getProportional() == stateData2.getProportional()
+                        && stateData1.getIntegral() == stateData2.getIntegral()
+                        && stateData1.getDerivative() == stateData2.getDerivative()
+                        && isEquals(stateData1.getTemperatureGoal(), stateData2.getTemperatureGoal())
+                        && isEquals(stateData1.getTemperatureReal(), stateData2.getTemperatureReal())
+                        && isEquals(stateData1.getTimeSlotCurrent(), stateData2.getTimeSlotCurrent()));
 
         return result;
     }
@@ -37,18 +28,12 @@ public class HeaterTemperatureStateDataComparator implements StateDataComparator
 
         boolean result = (stateData1 == null && stateData2 == null)
                 || (stateData1 != null && stateData2 != null
-                && stateData1.getDateBegin()
-                == stateData2.getDateBegin()
-                && stateData1.getDateEnd()
-                == stateData2.getDateEnd()
-                && stateData1.getFrequency()
-                == stateData2.getFrequency()
-                && stateData1.getFrequencyUnit()
-                == stateData2.getFrequencyUnit()
-                && stateData1.getPriority()
-                == stateData2.getPriority()
-                && stateData1.getTemperature()
-                == stateData2.getTemperature());
+                && stateData1.getDateBegin() == stateData2.getDateBegin()
+                && stateData1.getDateEnd() == stateData2.getDateEnd()
+                && stateData1.getFrequency() == stateData2.getFrequency()
+                && stateData1.getFrequencyUnit() == stateData2.getFrequencyUnit()
+                && stateData1.getPriority() == stateData2.getPriority()
+                && stateData1.getTemperature() == stateData2.getTemperature());
 
         return result;
     }
@@ -57,10 +42,8 @@ public class HeaterTemperatureStateDataComparator implements StateDataComparator
 
         boolean result = (stateData1 == null && stateData2 == null)
                 || (stateData1 != null && stateData2 != null
-                        && stateData1.getTemperature()
-                                == stateData2.getTemperature()
-                        && stateData1.getVariance()
-                                == stateData2.getVariance());
+                        && stateData1.getTemperature() == stateData2.getTemperature()
+                        && stateData1.getVariance() == stateData2.getVariance());
 
         return result;
     }
