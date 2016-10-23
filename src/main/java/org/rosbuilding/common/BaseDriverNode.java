@@ -190,7 +190,9 @@ public abstract class BaseDriverNode<
     /**
      * Initialize all node publishers & subscribers Topics.
      */
+    @Override
     protected void initTopics() {
+        super.initTopics();
         this.pubWol = this.connectedNode.createPublisher(std_msgs.msg.String.class, PUB_WOL);
 
         if (!Strings.isNullOrEmpty(this.stateDataType)) {
