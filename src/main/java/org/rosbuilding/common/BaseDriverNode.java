@@ -34,7 +34,6 @@ public abstract class BaseDriverNode<
         TStateData extends Message,
         TMessage extends Message>
         extends BaseSimpleNode<TConfiguration>
-//        implements ReconfigureListener<TConfiguration>, INode<TStateData>
 {
 
     // Constants
@@ -52,7 +51,6 @@ public abstract class BaseDriverNode<
     private List<IModule<TStateData, TMessage>> modules = new ArrayList<>();
 
     // Topics
-//    private Server<TConfiguration> serverReconfig; // Native on ROS2
     private Publisher<TStateData> pubStateData;
     private Publisher<std_msgs.msg.String> pubWol;
 
@@ -200,7 +198,6 @@ public abstract class BaseDriverNode<
                     (Class<TStateData>)makeClass(this.stateDataType),
                     this.configuration.getPrefix() + PUB_STATE
                     );
-//            this.pubStateData.setLatchMode(true);
         }
 
         if (!Strings.isNullOrEmpty(this.messageType)) {
@@ -228,9 +225,6 @@ public abstract class BaseDriverNode<
                 }
             });
         }
-
-        this.initSubscribers();
-        this.initPublishers();
     }
 
     /**
@@ -293,7 +287,6 @@ public abstract class BaseDriverNode<
         this.isConnected = false;
 
         this.initTopics();
-        this.initServices();
 
 //        this.publishZeroConf(); // Native on ROS2
 
@@ -349,8 +342,10 @@ public abstract class BaseDriverNode<
 
     @Override
     public TConfiguration onReconfigure(TConfiguration config, int level) {
-//        this.configuration.setRate(
-//                config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
+        this.configuration.setPrefix(this.connectedNode.getParameter(NodeConfig.PARAM_PREFIX).toParameterValue().getStringValue());
+        this.configuration.setRate(this.connectedNode.getParameter(NodeConfig.PARAM_RATE).toParameterValue().getIntegerValue());
+        this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeConfig.PARAM_FRAME).toParameterValue().getStringValue());
+        this.configuration.setMac(this.connectedNode.getParameter(NodeConfig.PARAM_MAC).toParameterValue().getStringValue());
 
         return config;
     }

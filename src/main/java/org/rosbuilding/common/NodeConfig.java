@@ -1,20 +1,25 @@
 package org.rosbuilding.common;
 
-//import org.ros.dynamic_reconfigure.server.BaseConfig;
+import java.util.Arrays;
+
 import org.ros2.rcljava.node.Node;
+import org.ros2.rcljava.node.parameter.ParameterVariant;
 
 
 public abstract class NodeConfig {
-//	extends BaseConfig {
 
-    public static final String RATE = "rate";
+    public static final String PARAM_PREFIX = "";
+    public static final String PARAM_RATE = "~rate";
+    public static final String PARAM_FRAME = "~fixed_frame";
+    public static final String PARAM_MAC = "~mac";
+
 
     protected final Node connectedNode;
 
     // Parameters
     private String prefix;
     private String fixedFrame;
-    private int rate;
+    private long rate;
     private String mac;
 
     /**
@@ -25,34 +30,39 @@ public abstract class NodeConfig {
      * @param defaultRate
      */
     protected NodeConfig(
-            Node connectedNode,
-            String defaultPrefix,
-            String defaultFixedFrame,
-            int defaultRate) {
-//        super(connectedNode);
+            final Node connectedNode,
+            final String defaultPrefix,
+            final String defaultFixedFrame,
+            final int defaultRate) {
 
         this.connectedNode = connectedNode;
-//        this.addField(RATE, "int", 0, "rate processus", 1, 0, 200);
+        this.connectedNode.setParameters(
+                Arrays.<ParameterVariant<?>>asList(
+                        new ParameterVariant<String>(PARAM_PREFIX,  defaultPrefix),
+                        new ParameterVariant<Long>  (PARAM_RATE,    1L),
+                        new ParameterVariant<String>(PARAM_FRAME,   defaultFixedFrame),
+                        new ParameterVariant<String>(PARAM_MAC,     "00:00:00:00:00:00")
+        ));
 
-        this.prefix = defaultPrefix;
+        this.prefix     = defaultPrefix;
         this.fixedFrame = defaultFixedFrame;
-        this.rate = defaultRate;
+        this.rate       = defaultRate;
     }
 
     protected void loadParameters() {
-        //this.logI("Load parameters.");
+        this.connectedNode.getLog().info("Load parameters.");
 
-//        this.prefix = String.format("/%s/", this.connectedNode.getParameterTree()
-//                .getString("~tf_prefix", this.prefix));
-//        this.fixedFrame = this.connectedNode.getParameterTree()
-//                .getString("~fixed_frame", this.fixedFrame);
-//        this.rate = this.connectedNode.getParameterTree()
-//                .getInteger("~" + RATE, this.rate);
-//        this.mac = this.connectedNode.getParameterTree()
-//                .getString("~mac", "00:00:00:00:00:00");
+        this.prefix     = this.connectedNode.getParameter(PARAM_PREFIX).toParameterValue().getStringValue();
+        this.fixedFrame = this.connectedNode.getParameter(PARAM_FRAME).toParameterValue().getStringValue();
+        this.rate       = this.connectedNode.getParameter(PARAM_RATE).toParameterValue().getIntegerValue();
+        this.mac        = this.connectedNode.getParameter(PARAM_MAC).toParameterValue().getStringValue() ;
 
         if (this.rate <= 0) {
             this.rate = 1;
+            this.connectedNode.setParameters(
+                    Arrays.<ParameterVariant<?>>asList(
+                        new ParameterVariant<Long>(PARAM_RATE, this.rate)
+            ));
         }
     }
 
@@ -60,7 +70,7 @@ public abstract class NodeConfig {
         return this.prefix;
     }
 
-    public void setPrefix(String prefix) {
+    public void setPrefix(final String prefix) {
         this.prefix = prefix;
     }
 
@@ -68,15 +78,15 @@ public abstract class NodeConfig {
         return this.fixedFrame;
     }
 
-    public void setFixedFrame(String fixedFrame) {
+    public void setFixedFrame(final String fixedFrame) {
         this.fixedFrame = fixedFrame;
     }
 
-    public int getRate() {
+    public long getRate() {
         return this.rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(long rate) {
         this.rate = rate;
     }
 
@@ -84,7 +94,7 @@ public abstract class NodeConfig {
         return this.mac;
     }
 
-    public void setMac(String mac) {
+    public void setMac(final String mac) {
         this.mac = mac;
     }
 }
