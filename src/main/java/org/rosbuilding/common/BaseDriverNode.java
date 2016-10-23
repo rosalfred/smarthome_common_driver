@@ -38,10 +38,10 @@ public abstract class BaseDriverNode<
 {
 
     // Constants
-    public static final String PUB_WOL      = "/wol";
-    public static final String PUB_STATE    = "statedata";
-    public static final String SUB_CMD      = "cmd_action";
-    public static final String SUB_STATE_ROBOT    = "robotsay";
+    public static final String PUB_WOL          = "/wol";
+    public static final String PUB_STATE        = "statedata";
+    public static final String SUB_CMD          = "cmd_action";
+    public static final String SUB_STATE_ROBOT  = "robotsay";
 
     // Fields
     private boolean isConnected = false;
@@ -233,6 +233,9 @@ public abstract class BaseDriverNode<
         this.initPublishers();
     }
 
+    /**
+     * On node shutdown start.
+     */
     @Override
     public void onShutdown(Node node) {
         this.th.interrupt();
@@ -283,9 +286,6 @@ public abstract class BaseDriverNode<
 
     }
 
-    /**
-     * On node shutdown start.
-     */
     protected void initialize() {
         this.logI("Start main loop.");
 
