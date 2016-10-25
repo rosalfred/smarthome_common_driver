@@ -119,6 +119,6 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
      * @param message this message
      */
     public void logE(final Exception message) {
-        this.connectedNode.getLog().error(message.getStackTrace());
+        this.connectedNode.getLog().error(message.getMessage());
     }
 }
