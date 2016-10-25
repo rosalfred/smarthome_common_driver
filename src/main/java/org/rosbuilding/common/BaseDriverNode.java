@@ -34,14 +34,13 @@ public abstract class BaseDriverNode<
         TStateData extends Message,
         TMessage extends Message>
         extends BaseSimpleNode<TConfiguration>
-//        implements ReconfigureListener<TConfiguration>, INode<TStateData>
 {
 
     // Constants
-    public static final String PUB_WOL      = "/wol";
-    public static final String PUB_STATE    = "statedata";
-    public static final String SUB_CMD      = "cmd_action";
-    public static final String SUB_STATE_ROBOT    = "robotsay";
+    public static final String PUB_WOL          = "/wol";
+    public static final String PUB_STATE        = "statedata";
+    public static final String SUB_CMD          = "cmd_action";
+    public static final String SUB_STATE_ROBOT  = "robotsay";
 
     // Fields
     private boolean isConnected = false;
@@ -52,7 +51,6 @@ public abstract class BaseDriverNode<
     private List<IModule<TStateData, TMessage>> modules = new ArrayList<>();
 
     // Topics
-//    private Server<TConfiguration> serverReconfig; // Native on ROS2
     private Publisher<TStateData> pubStateData;
     private Publisher<std_msgs.msg.String> pubWol;
 
@@ -192,7 +190,9 @@ public abstract class BaseDriverNode<
     /**
      * Initialize all node publishers & subscribers Topics.
      */
+    @Override
     protected void initTopics() {
+        super.initTopics();
         this.pubWol = this.connectedNode.createPublisher(std_msgs.msg.String.class, PUB_WOL);
 
         if (!Strings.isNullOrEmpty(this.stateDataType)) {
@@ -200,7 +200,6 @@ public abstract class BaseDriverNode<
                     (Class<TStateData>)makeClass(this.stateDataType),
                     this.configuration.getPrefix() + PUB_STATE
                     );
-//            this.pubStateData.setLatchMode(true);
         }
 
         if (!Strings.isNullOrEmpty(this.messageType)) {
@@ -228,11 +227,11 @@ public abstract class BaseDriverNode<
                 }
             });
         }
-
-        this.initSubscribers();
-        this.initPublishers();
     }
 
+    /**
+     * On node shutdown start.
+     */
     @Override
     public void onShutdown(Node node) {
         this.th.interrupt();
@@ -283,9 +282,6 @@ public abstract class BaseDriverNode<
 
     }
 
-    /**
-     * On node shutdown start.
-     */
     protected void initialize() {
         this.logI("Start main loop.");
 
@@ -293,7 +289,6 @@ public abstract class BaseDriverNode<
         this.isConnected = false;
 
         this.initTopics();
-        this.initServices();
 
 //        this.publishZeroConf(); // Native on ROS2
 
@@ -349,8 +344,10 @@ public abstract class BaseDriverNode<
 
     @Override
     public TConfiguration onReconfigure(TConfiguration config, int level) {
-//        this.configuration.setRate(
-//                config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
+        this.configuration.setPrefix(this.connectedNode.getParameter(NodeConfig.PARAM_PREFIX).toParameterValue().getStringValue());
+        this.configuration.setRate(this.connectedNode.getParameter(NodeConfig.PARAM_RATE).toParameterValue().getIntegerValue());
+        this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeConfig.PARAM_FRAME).toParameterValue().getStringValue());
+        this.configuration.setMac(this.connectedNode.getParameter(NodeConfig.PARAM_MAC).toParameterValue().getStringValue());
 
         return config;
     }

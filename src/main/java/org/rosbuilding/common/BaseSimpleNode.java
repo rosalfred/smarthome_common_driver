@@ -29,12 +29,7 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
     /**
      * Load parameters of launcher
      */
-    protected void loadParameters() { // Native on ROS2
-//        this.serverReconfig = new Server<TConfiguration>(
-//                this.getConnectedNode(),
-//                this.configuration,
-//                this);
-    }
+    protected void loadParameters() { }
 
     public final Node getConnectedNode() {
         return this.connectedNode;
@@ -79,15 +74,6 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
      * Initialize all node publishers & subscribers Topics.
      */
     protected void initTopics() { }
-
-    /**
-     * Initialize all node services.
-     */
-    protected void initServices() { }
-
-    protected void initSubscribers() { }
-
-    protected void initPublishers() { }
 
     // Log assessors
     /**
