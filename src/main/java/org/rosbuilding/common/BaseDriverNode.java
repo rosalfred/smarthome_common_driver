@@ -30,7 +30,7 @@ import smarthome_comm_msgs.msg.Command;
  * BaseNodeMain<TConfiguration extends NodeConfig, TStateData extends Message, TMessage extends Message>
  */
 public abstract class BaseDriverNode<
-        TConfiguration extends NodeConfig,
+        TConfiguration extends NodeDriverConfig,
         TStateData extends Message,
         TMessage extends Message>
         extends BaseSimpleNode<TConfiguration>
@@ -344,10 +344,9 @@ public abstract class BaseDriverNode<
 
     @Override
     public TConfiguration onReconfigure(TConfiguration config, int level) {
-        this.configuration.setPrefix(this.connectedNode.getParameter(NodeConfig.PARAM_PREFIX).toParameterValue().getStringValue());
-        this.configuration.setRate(this.connectedNode.getParameter(NodeConfig.PARAM_RATE).toParameterValue().getIntegerValue());
-        this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeConfig.PARAM_FRAME).toParameterValue().getStringValue());
-        this.configuration.setMac(this.connectedNode.getParameter(NodeConfig.PARAM_MAC).toParameterValue().getStringValue());
+        this.configuration.setPrefix(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_PREFIX).toParameterValue().getStringValue());
+        this.configuration.setRate(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_RATE).toParameterValue().getIntegerValue());
+        this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_FRAME).toParameterValue().getStringValue());
 
         return config;
     }

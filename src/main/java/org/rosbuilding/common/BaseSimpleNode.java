@@ -11,12 +11,17 @@ package org.rosbuilding.common;
 import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  * @author Mickael Gaillard <mick.gaillard@gmail.com>
  */
-public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
+public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
+
+    protected static final Logger logger = LoggerFactory.getLogger(BaseSimpleNode.class);
 
     protected Node connectedNode;
     public TConfiguration configuration; //TODO make private
