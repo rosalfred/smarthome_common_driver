@@ -63,12 +63,10 @@ public abstract class BaseDriverNode<
 //    private Thread threadZeroconf = null; // Native on ROS2
 
     protected BaseDriverNode(
-            String nodeName,
             StateDataComparator<TStateData> comparator,
             MessageConverter<TMessage> converter,
             String messageType,
             String stateDataType) {
-        super(nodeName);
 
         this.comparator = comparator;
         this.converter = converter;
@@ -190,6 +188,7 @@ public abstract class BaseDriverNode<
     /**
      * Initialize all node publishers & subscribers Topics.
      */
+    @SuppressWarnings({ "unchecked", "unused" })
     @Override
     protected void initTopics() {
         super.initTopics();
@@ -203,7 +202,7 @@ public abstract class BaseDriverNode<
         }
 
         if (!Strings.isNullOrEmpty(this.messageType)) {
-            // Local topic (mapped by prefix and namespace)
+            // Local topic (mapped by prefix and name space)
             Subscription<TMessage> messageSubscriber = this.connectedNode.createSubscription(
                     (Class<TMessage>)makeClass(this.messageType),
                     this.configuration.getPrefix() + SUB_CMD,
@@ -278,6 +277,7 @@ public abstract class BaseDriverNode<
                 }
             }
         });
+        this.th.setName("stateData");
         this.th.start();
 
     }
