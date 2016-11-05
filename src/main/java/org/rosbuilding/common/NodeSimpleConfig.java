@@ -6,12 +6,11 @@ import org.ros2.rcljava.node.Node;
 import org.ros2.rcljava.node.parameter.ParameterVariant;
 
 
-public abstract class NodeConfig {
+public abstract class NodeSimpleConfig {
 
     public static final String PARAM_PREFIX = "";
     public static final String PARAM_RATE = "~rate";
     public static final String PARAM_FRAME = "~fixed_frame";
-    public static final String PARAM_MAC = "~mac";
 
 
     protected final Node connectedNode;
@@ -20,7 +19,6 @@ public abstract class NodeConfig {
     private String prefix;
     private String fixedFrame;
     private long rate;
-    private String mac;
 
     /**
      *
@@ -29,7 +27,7 @@ public abstract class NodeConfig {
      * @param defaultFixedFrame
      * @param defaultRate
      */
-    protected NodeConfig(
+    protected NodeSimpleConfig(
             final Node connectedNode,
             final String defaultPrefix,
             final String defaultFixedFrame,
@@ -40,13 +38,8 @@ public abstract class NodeConfig {
                 Arrays.<ParameterVariant<?>>asList(
                         new ParameterVariant<String>(PARAM_PREFIX,  defaultPrefix),
                         new ParameterVariant<Long>  (PARAM_RATE,    1L),
-                        new ParameterVariant<String>(PARAM_FRAME,   defaultFixedFrame),
-                        new ParameterVariant<String>(PARAM_MAC,     "00:00:00:00:00:00")
+                        new ParameterVariant<String>(PARAM_FRAME,   defaultFixedFrame)
         ));
-
-        this.prefix     = defaultPrefix;
-        this.fixedFrame = defaultFixedFrame;
-        this.rate       = defaultRate;
     }
 
     protected void loadParameters() {
@@ -55,7 +48,6 @@ public abstract class NodeConfig {
         this.prefix     = this.connectedNode.getParameter(PARAM_PREFIX).toParameterValue().getStringValue();
         this.fixedFrame = this.connectedNode.getParameter(PARAM_FRAME).toParameterValue().getStringValue();
         this.rate       = this.connectedNode.getParameter(PARAM_RATE).toParameterValue().getIntegerValue();
-        this.mac        = this.connectedNode.getParameter(PARAM_MAC).toParameterValue().getStringValue() ;
 
         if (this.rate <= 0) {
             this.rate = 1;
@@ -88,13 +80,5 @@ public abstract class NodeConfig {
 
     public void setRate(long rate) {
         this.rate = rate;
-    }
-
-    public String getMac() {
-        return this.mac;
-    }
-
-    public void setMac(final String mac) {
-        this.mac = mac;
     }
 }

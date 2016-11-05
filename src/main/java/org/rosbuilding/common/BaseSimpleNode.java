@@ -11,25 +11,32 @@ package org.rosbuilding.common;
 import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  * @author Mickael Gaillard <mick.gaillard@gmail.com>
  */
-public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
+public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
+
+    protected static final Logger logger = LoggerFactory.getLogger(BaseSimpleNode.class);
 
     protected Node connectedNode;
-    public TConfiguration configuration; //TODO make private
-    protected final String nodeName;
+    protected TConfiguration configuration;
 
-    public BaseSimpleNode(final String nodeName) {
-        this.nodeName = nodeName;
-    }
+    protected abstract TConfiguration getConfig();
 
     /**
      * Load parameters of launcher
      */
     protected void loadParameters() { }
+
+    /**
+     * Initialize all node publishers & subscribers Topics.
+     */
+    protected void initTopics() { }
 
     public final Node getConnectedNode() {
         return this.connectedNode;
@@ -45,7 +52,7 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
         this.configuration = this.getConfig();
         this.configuration.loadParameters();
 
-        this.logI(String.format("Start %s node...", this.nodeName));
+        this.logI(String.format("Start %s node...", this.connectedNode.getName()));
     }
 
     public void onShutdown(Node node) {
@@ -67,13 +74,6 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeConfig> {
     public void onError(Node node, Throwable throwable) {
         this.logE(throwable.getMessage());
     }
-
-    protected abstract TConfiguration getConfig();
-
-    /**
-     * Initialize all node publishers & subscribers Topics.
-     */
-    protected void initTopics() { }
 
     // Log assessors
     /**
