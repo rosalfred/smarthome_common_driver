@@ -21,11 +21,12 @@ public abstract class NodeDriverConfig extends NodeSimpleConfig {
      */
     protected NodeDriverConfig(
             final Node connectedNode,
-            final String defaultPrefix,
+            final String defaultNameSpace,
+            final String defaultNodeName,
             final String defaultFixedFrame,
             final int defaultRate,
             final String macAddress) {
-        super(connectedNode, defaultPrefix, defaultFixedFrame, defaultRate);
+        super(connectedNode, defaultNameSpace, defaultNodeName, defaultFixedFrame, defaultRate);
 
         this.connectedNode.setParameters(
                 Arrays.<ParameterVariant<?>>asList(

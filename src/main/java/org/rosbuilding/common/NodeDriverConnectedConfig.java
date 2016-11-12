@@ -27,7 +27,8 @@ public abstract class NodeDriverConnectedConfig extends NodeDriverConfig {
      */
     protected NodeDriverConnectedConfig(
             final Node connectedNode,
-            final String defaultPrefix,
+            final String defaultNameSpace,
+            final String defaultNodeName,
             final String defaultFixedFrame,
             final int defaultRate,
             final String macAddress,
@@ -35,7 +36,7 @@ public abstract class NodeDriverConnectedConfig extends NodeDriverConfig {
             final long   port,
             final String user,
             final String password) {
-        super(connectedNode, defaultPrefix, defaultFixedFrame, defaultRate, macAddress);
+        super(connectedNode, defaultNameSpace, defaultNodeName, defaultFixedFrame, defaultRate, macAddress);
 
         this.connectedNode.setParameters(
                 Arrays.<ParameterVariant<?>>asList(

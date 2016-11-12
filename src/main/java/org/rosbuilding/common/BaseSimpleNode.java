@@ -23,9 +23,15 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
 
     protected static final Logger logger = LoggerFactory.getLogger(BaseSimpleNode.class);
 
+    /** Node */
     protected Node connectedNode;
+
+    /** Configuration */
     protected TConfiguration configuration;
 
+    /**
+     * @return Lazy instance of configuration.
+     */
     protected abstract TConfiguration makeConfiguration();
 
     /**
