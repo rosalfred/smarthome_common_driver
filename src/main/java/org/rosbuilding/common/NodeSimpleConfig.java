@@ -2,13 +2,15 @@ package org.rosbuilding.common;
 
 import java.util.Arrays;
 
+import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 import org.ros2.rcljava.node.parameter.ParameterVariant;
 
 
 public abstract class NodeSimpleConfig {
 
-    public static final String PARAM_PREFIX = "";
+    public static final String PARAM_NAMESPACE = "~ns";
+    public static final String PARAM_NODENAME = "~node";
     public static final String PARAM_RATE = "~rate";
     public static final String PARAM_FRAME = "~fixed_frame";
 
@@ -16,7 +18,8 @@ public abstract class NodeSimpleConfig {
     protected final Node connectedNode;
 
     // Parameters
-    private String prefix;
+    private String namespace;
+    private String nodeName;
     private String fixedFrame;
     private long rate;
 
@@ -29,14 +32,16 @@ public abstract class NodeSimpleConfig {
      */
     protected NodeSimpleConfig(
             final Node connectedNode,
-            final String defaultPrefix,
+            final String defaultNameSpace,
+            final String defaultNodeName,
             final String defaultFixedFrame,
             final int defaultRate) {
 
         this.connectedNode = connectedNode;
         this.connectedNode.setParameters(
                 Arrays.<ParameterVariant<?>>asList(
-                        new ParameterVariant<String>(PARAM_PREFIX,  defaultPrefix),
+                        new ParameterVariant<String>(PARAM_NAMESPACE,  namespace),
+                        new ParameterVariant<String>(PARAM_NODENAME,  nodeName),
                         new ParameterVariant<Long>  (PARAM_RATE,    1L),
                         new ParameterVariant<String>(PARAM_FRAME,   defaultFixedFrame)
         ));
@@ -45,7 +50,8 @@ public abstract class NodeSimpleConfig {
     protected void loadParameters() {
         this.connectedNode.getLog().info("Load parameters.");
 
-        this.prefix     = this.connectedNode.getParameter(PARAM_PREFIX).toParameterValue().getStringValue();
+        this.namespace  = this.connectedNode.getParameter(PARAM_NAMESPACE).toParameterValue().getStringValue();
+        this.nodeName   = this.connectedNode.getParameter(PARAM_NODENAME).toParameterValue().getStringValue();
         this.fixedFrame = this.connectedNode.getParameter(PARAM_FRAME).toParameterValue().getStringValue();
         this.rate       = this.connectedNode.getParameter(PARAM_RATE).toParameterValue().getIntegerValue();
 
@@ -59,11 +65,7 @@ public abstract class NodeSimpleConfig {
     }
 
     public String getPrefix() {
-        return this.prefix;
-    }
-
-    public void setPrefix(final String prefix) {
-        this.prefix = prefix;
+        return GraphName.getFullName(this.connectedNode, "~", null);
     }
 
     public String getFixedFrame() {

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ros2.rcljava.internal.message.Message;
+import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 import org.ros2.rcljava.node.topic.Consumer;
 import org.ros2.rcljava.node.topic.Publisher;
@@ -38,9 +39,9 @@ public abstract class BaseDriverNode<
 
     // Constants
     public static final String PUB_WOL          = "/wol";
-    public static final String PUB_STATE        = "statedata";
-    public static final String SUB_CMD          = "cmd_action";
-    public static final String SUB_STATE_ROBOT  = "robotsay";
+    public static final String PUB_STATE        = "~/statedata";
+    public static final String SUB_CMD          = "~/cmd_action";
+    public static final String SUB_STATE_ROBOT  = "/robotsay";
 
     // Fields
     private boolean isConnected = false;
@@ -197,7 +198,7 @@ public abstract class BaseDriverNode<
         if (!Strings.isNullOrEmpty(this.stateDataType)) {
             this.pubStateData = this.connectedNode.createPublisher(
                     (Class<TStateData>)makeClass(this.stateDataType),
-                    this.configuration.getPrefix() + PUB_STATE
+                    GraphName.getFullName(this.connectedNode, PUB_STATE, null)
                     );
         }
 
@@ -205,7 +206,7 @@ public abstract class BaseDriverNode<
             // Local topic (mapped by prefix and name space)
             Subscription<TMessage> messageSubscriber = this.connectedNode.createSubscription(
                     (Class<TMessage>)makeClass(this.messageType),
-                    this.configuration.getPrefix() + SUB_CMD,
+                    GraphName.getFullName(this.connectedNode, SUB_CMD, null),
                     new Consumer<TMessage>() {
                 @Override
                 public void accept(TMessage msg) {
@@ -218,7 +219,7 @@ public abstract class BaseDriverNode<
             // Global topic registration (no prefix...)
             Subscription<Command> commandSubscriber = this.connectedNode.createSubscription(
                     Command.class,
-                    "/" + SUB_STATE_ROBOT,
+                    GraphName.getFullName(this.connectedNode, SUB_STATE_ROBOT, null),
                     new Consumer<Command>() {
                 @Override
                 public void accept(Command msg) {
@@ -344,7 +345,7 @@ public abstract class BaseDriverNode<
 
     @Override
     public TConfiguration onReconfigure(TConfiguration config, int level) {
-        this.configuration.setPrefix(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_PREFIX).toParameterValue().getStringValue());
+//        this.configuration.setPrefix(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_PREFIX).toParameterValue().getStringValue());
         this.configuration.setRate(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_RATE).toParameterValue().getIntegerValue());
         this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_FRAME).toParameterValue().getStringValue());
 
