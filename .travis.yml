@@ -30,7 +30,6 @@ before_install:
 - cd $ROS2WS
 - docker run -u "$UID" -it --rm -v `pwd`:`pwd` -w `pwd` theosakamg7/ros2java:latest sh -c "/usr/bin/wget https://gist.githubusercontent.com/Theosakamg/51f3e8670784db13d9190c58e3e57eb2/raw/ros2_alfred.repos"
 - docker run -u "$UID" -it --rm -v `pwd`:`pwd` -w `pwd` theosakamg7/ros2java:latest sh -c "/usr/bin/vcs import src < ros2_alfred.repos"
-- cd $ROS2WS/src/ros2/common_interfaces && patch -p1 < ../../ros2_java/ros2_java/common_interfaces_full.diff
 - rm -rf $ROS2WS/src/rosalfred/smarthome_common_driver && ln -s $HOME_BUILD/rosalfred/smarthome_common_driver $ROS2WS/src/rosalfred/smarthome_common_driver
 - echo "BUILD ROS2 WS..."
 - cd $HOME_BUILD && ls -lFa ./ && find . -maxdepth 3 -type d -not \( -path "./.git" -prune \)
