@@ -27,19 +27,16 @@
   <build_depend>smarthome_comm_msgs</build_depend>
   <build_depend>smarthome_media_msgs</build_depend>
   <build_depend>smarthome_heater_msgs</build_depend>
-  <!--build_depend>smarthome_network_zeroconf</build_depend>
-  <build_depend>rosjava_dynamic_reconfigure</build_depend-->
+  <build_depend>smarthome_light_msgs</build_depend>
 
   <!-- exec_depend>rosidl_generator_java</exec_depend-->
   <exec_depend>rcljava</exec_depend>
-  <exec_depend>rosidl_generator_java</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>smarthome_comm_msgs</exec_depend>
   <exec_depend>smarthome_media_msgs</exec_depend>
   <exec_depend>smarthome_heater_msgs</exec_depend>
-  <!--exec_depend>smarthome_network_zeroconf</exec_depend>
-  <exec_depend>rosjava_dynamic_reconfigure</exec_depend-->
+  <exec_depend>smarthome_light_msgs</exec_depend>
 
   <export>
     <architecture_independent/>
