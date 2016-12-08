@@ -14,7 +14,7 @@ import java.util.List;
 import org.ros2.rcljava.internal.message.Message;
 import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
-import org.ros2.rcljava.node.topic.Consumer;
+import org.ros2.rcljava.node.topic.SubscriptionCallback;
 import org.ros2.rcljava.node.topic.Publisher;
 import org.ros2.rcljava.node.topic.Subscription;
 
@@ -207,9 +207,9 @@ public abstract class BaseDriverNode<
             Subscription<TMessage> messageSubscriber = this.connectedNode.createSubscription(
                     (Class<TMessage>)makeClass(this.messageType),
                     GraphName.getFullName(this.connectedNode, SUB_CMD, null),
-                    new Consumer<TMessage>() {
+                    new SubscriptionCallback<TMessage>() {
                 @Override
-                public void accept(TMessage msg) {
+                public void dispatch(TMessage msg) {
                     BaseDriverNode.this.onNewMessage(msg);
                 }
             });
@@ -220,9 +220,9 @@ public abstract class BaseDriverNode<
             Subscription<Command> commandSubscriber = this.connectedNode.createSubscription(
                     Command.class,
                     GraphName.getFullName(this.connectedNode, SUB_STATE_ROBOT, null),
-                    new Consumer<Command>() {
+                    new SubscriptionCallback<Command>() {
                 @Override
-                public void accept(Command msg) {
+                public void dispatch(Command msg) {
                     BaseDriverNode.this.onNewMessage(msg);
                 }
             });
