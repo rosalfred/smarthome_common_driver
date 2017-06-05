@@ -15,6 +15,8 @@ import org.ros2.rcljava.internal.message.Message;
 import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 import org.ros2.rcljava.node.topic.SubscriptionCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ros2.rcljava.node.topic.Publisher;
 import org.ros2.rcljava.node.topic.Subscription;
 
@@ -43,6 +45,8 @@ public abstract class BaseDriverNode<
     public static final String SUB_CMD          = "~/cmd_action";
     public static final String SUB_STATE_ROBOT  = "/robotsay";
 
+    private static final Logger logger = LoggerFactory.getLogger(BaseDriverNode.class);
+
     // Fields
     private boolean isConnected = false;
     private TStateData stateData;
@@ -68,6 +72,7 @@ public abstract class BaseDriverNode<
             MessageConverter<TMessage> converter,
             String messageType,
             String stateDataType) {
+        BaseDriverNode.logger.debug("Initialize Managed Alfred Node.");
 
         this.comparator = comparator;
         this.converter = converter;
@@ -80,7 +85,14 @@ public abstract class BaseDriverNode<
      */
     protected abstract boolean connect();
 
+    /**
+     * Event when connection is establish.
+     */
     protected abstract void onConnected();
+
+    /**
+     * Event when connection is lost.
+     */
     protected abstract void onDisconnected();
 
     public final TMessage getNewMessageInstance() {
@@ -89,6 +101,8 @@ public abstract class BaseDriverNode<
 
     @SuppressWarnings("unchecked")
     public <T extends Message> T getNewMessageInstance(String type) {
+        BaseDriverNode.logger.debug("Initialize Message.");
+
         T obj = null;
         try {
             Class<?> ref = Class.forName(type);
@@ -101,6 +115,8 @@ public abstract class BaseDriverNode<
     }
 
     public static Class<?> makeClass(String type) {
+        BaseDriverNode.logger.debug("Get class for " + type + " .");
+
         Class<?> ref = null;
         try {
             ref = Class.forName(type);
@@ -111,16 +127,10 @@ public abstract class BaseDriverNode<
         return ref;
     }
 
-    public final TStateData getStateData() {
-        return this.stateData;
-    }
-
-    protected final boolean isConnected() {
-        return this.isConnected;
-    }
-
     protected final void addModule(IModule<TStateData, TMessage> module) {
         if (module != null) {
+            BaseDriverNode.logger.debug("Add module : " + module.getClass().getSimpleName());
+
             this.modules.add(module);
         }
     }
@@ -132,13 +142,15 @@ public abstract class BaseDriverNode<
     protected void refreshStateData() throws InterruptedException {
 
         if (this.isConnected ) {
-            this.onConnected();
-
             for (IModule<TStateData, TMessage> module : this.modules) {
                 module.load(this.stateData);
             }
         } else {
             this.isConnected = this.connect();
+
+            if (this.isConnected) {
+                this.onConnected();
+            }
         }
 
         if (this.comparator != null && !this.comparator.isEquals(this.stateData, this.oldStateData)) {
@@ -159,6 +171,8 @@ public abstract class BaseDriverNode<
      */
     public void onNewMessage(TMessage message) {
         if (message != null) {
+            BaseDriverNode.logger.debug("onNewMessage events ! (" + message.getClass().getName() + ")");
+
             try {
                 for (IModule<TStateData, TMessage> module : this.modules) {
                     module.callbackCmdAction(message, this.stateData);
@@ -177,6 +191,8 @@ public abstract class BaseDriverNode<
      * @param command the received generic command message.
      */
     protected void onNewMessage(Command command) {
+        BaseDriverNode.logger.debug("onNewMessage events ! (" + Command.class.getName() + ")");
+
         String[] wheres = command.getContext().getWhere().split(" ");
 
         for (String where : wheres) {
@@ -186,13 +202,55 @@ public abstract class BaseDriverNode<
         }
     }
 
+    @Override
+    public TConfiguration onReconfigure(TConfiguration config, int level) {
+        BaseDriverNode.logger.debug("onReconfigure event !");
+
+//        this.configuration.setPrefix(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_PREFIX).toParameterValue().getStringValue());
+        this.configuration.setRate(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_RATE).toParameterValue().getIntegerValue());
+        this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_FRAME).toParameterValue().getStringValue());
+
+        return config;
+    }
+
+    /**
+     * On node shutdown start.
+     */
+    @Override
+    public void onShutdown() {
+        BaseDriverNode.logger.debug("onShutdown event !");
+        this.th.interrupt();
+
+        super.onShutdown();
+    }
+
+    @Override
+    public void onError(Node node, Throwable throwable) {
+        super.onError(node, throwable);
+        this.logE(throwable.getMessage());
+    }
+
+    protected void initialize() {
+        this.logI("Custom Managed node.");
+        this.isConnected = false;
+
+        this.loadParameters();
+
+        this.initTopics();
+
+        this.stateData = this.getNewMessageInstance(this.stateDataType);
+        //this.pubStateData.newMessage();
+    }
+
     /**
      * Initialize all node publishers & subscribers Topics.
      */
     @SuppressWarnings({ "unchecked", "unused" })
     @Override
     protected void initTopics() {
+        BaseDriverNode.logger.debug("Initialize Topics.");
         super.initTopics();
+
         this.pubWol = this.connectedNode.createPublisher(std_msgs.msg.String.class, PUB_WOL);
 
         if (!Strings.isNullOrEmpty(this.stateDataType)) {
@@ -229,32 +287,12 @@ public abstract class BaseDriverNode<
         }
     }
 
-    /**
-     * On node shutdown start.
-     */
     @Override
-    public void onShutdown(Node node) {
-        this.th.interrupt();
-
-     // Native on ROS2
-//        if (this.serverReconfig != null)
-//            this.serverReconfig.close();
-//
-//        if (this.threadZeroconf != null && this.threadZeroconf.isAlive()) {
-//            this.threadZeroconf.interrupt();
-//        }
-
-        super.onShutdown(node);
-    }
-
-    @Override
-    public void onError(Node node, Throwable throwable) {
-        super.onError(node, throwable);
-        this.logE(throwable.getMessage());
-    }
-
-    public void startFinal() {
+    public void onStarted() {
+        BaseDriverNode.logger.debug("onStarted event !");
+        super.onStarted();
         this.initialize();
+
 
         // This CancellableLoop will be canceled automatically when the node
         // shuts down.
@@ -264,6 +302,9 @@ public abstract class BaseDriverNode<
 //                refreshStateData();
 //            }
 //        });
+
+        this.logI("Start main loop.");
+        BaseDriverNode.logger.debug("Starting thread for refresh data.");
 
         this.th = new Thread(new Runnable() {
 
@@ -278,23 +319,9 @@ public abstract class BaseDriverNode<
                 }
             }
         });
-        this.th.setName("stateData");
+        this.th.setName("Refresh state data");
         this.th.start();
 
-    }
-
-    protected void initialize() {
-        this.logI("Start main loop.");
-
-        this.loadParameters();
-        this.isConnected = false;
-
-        this.initTopics();
-
-//        this.publishZeroConf(); // Native on ROS2
-
-        this.stateData = this.getNewMessageInstance(this.stateDataType);
-                //this.pubStateData.newMessage();
     }
 
     public final void wakeOnLan() {
@@ -343,13 +370,12 @@ public abstract class BaseDriverNode<
 //        return configuration;
 //    }
 
-    @Override
-    public TConfiguration onReconfigure(TConfiguration config, int level) {
-//        this.configuration.setPrefix(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_PREFIX).toParameterValue().getStringValue());
-        this.configuration.setRate(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_RATE).toParameterValue().getIntegerValue());
-        this.configuration.setFixedFrame(this.connectedNode.getParameter(NodeSimpleConfig.PARAM_FRAME).toParameterValue().getStringValue());
+    public final TStateData getStateData() {
+        return this.stateData;
+    }
 
-        return config;
+    protected final boolean isConnected() {
+        return this.isConnected;
     }
 
     public StateDataComparator<TStateData> getComparator() {

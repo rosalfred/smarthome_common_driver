@@ -37,41 +37,49 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
     /**
      * Load parameters of launcher
      */
-    protected void loadParameters() { }
+    protected void loadParameters() {
+        BaseSimpleNode.logger.debug("Load parameters.");
+        this.configuration.loadParameters();
+    }
 
     /**
      * Initialize all node publishers & subscribers Topics.
      */
-    protected void initTopics() { }
-
-    public final Node getConnectedNode() {
-        return this.connectedNode;
-    }
-
-    public GraphName getDefaultNodeName() {
-        return null; //GraphName.of(this.nodeName);
+    protected void initTopics() {
+        BaseSimpleNode.logger.debug("Initialize topics.");
     }
 
     public void onStart(final Node connectedNode) {
+        BaseSimpleNode.logger.debug("onStart event !");
+
         this.connectedNode = connectedNode;
-
         this.configuration = this.makeConfiguration();
-        this.configuration.loadParameters();
+//        this.configuration.loadParameters();
 
-        this.logI(String.format("Start %s node...", this.connectedNode.getName()));
+        this.logI(String.format("Started %s node !", this.connectedNode.getName()));
     }
 
-    public void onShutdown(Node node) {
-        this.logI("Stop node !");
+    public void onStarted() {
+        BaseSimpleNode.logger.debug("onStarted event !");
+    }
 
+    public void onShutdown() {
+        BaseSimpleNode.logger.debug("onShutdown event !");
+
+        // Need to make before dispose node for log !
+        this.logI(String.format("Stoped %s node !", this.connectedNode.getName()));
+
+    }
+
+    public void onShutdowned() {
+        BaseSimpleNode.logger.debug("onShutdowned event !");
+
+        this.connectedNode.dispose();
         this.connectedNode = null;
     }
 
-    public TConfiguration getConfiguration() {
-        return this.configuration;
-    }
-
     public TConfiguration onReconfigure(TConfiguration config, int level) {
+        BaseSimpleNode.logger.debug("onReconfigure event !");
 //      this.configuration.setRate(
 //              config.getInteger(NodeConfig.RATE, this.configuration.getRate()));
 
@@ -116,5 +124,17 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
      */
     public void logE(final Exception message) {
         this.connectedNode.getLog().error(message.getMessage());
+    }
+
+    public final Node getConnectedNode() {
+        return this.connectedNode;
+    }
+
+    public GraphName getDefaultNodeName() {
+        return null; //TODO GraphName.of(this.nodeName);
+    }
+
+    public TConfiguration getConfiguration() {
+        return this.configuration;
     }
 }

@@ -5,15 +5,18 @@ import java.util.Arrays;
 import org.ros2.rcljava.namespace.GraphName;
 import org.ros2.rcljava.node.Node;
 import org.ros2.rcljava.node.parameter.ParameterVariant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public abstract class NodeSimpleConfig {
 
-    public static final String PARAM_NAMESPACE = "~ns";
-    public static final String PARAM_NODENAME = "~node";
-    public static final String PARAM_RATE = "~rate";
-    public static final String PARAM_FRAME = "~fixed_frame";
+    public static final String PARAM_NAMESPACE  = "ns";
+    public static final String PARAM_NODENAME   = "node";
+    public static final String PARAM_RATE       = "rate";
+    public static final String PARAM_FRAME      = "fixed_frame";
 
+    private static final Logger logger = LoggerFactory.getLogger(NodeSimpleConfig.class);
 
     protected final Node connectedNode;
 
@@ -36,8 +39,11 @@ public abstract class NodeSimpleConfig {
             final String defaultNodeName,
             final String defaultFixedFrame,
             final int defaultRate) {
-
         this.connectedNode = connectedNode;
+
+        this.connectedNode.getLog().info("Initialize configuration...");
+        NodeSimpleConfig.logger.debug("Initialize configuration... (ns, name, rate, frame)");
+
         this.connectedNode.setParameters(
                 Arrays.<ParameterVariant<?>>asList(
                         new ParameterVariant<String>(PARAM_NAMESPACE,  namespace),
@@ -48,13 +54,15 @@ public abstract class NodeSimpleConfig {
     }
 
     protected void loadParameters() {
-        this.connectedNode.getLog().info("Load parameters.");
+        this.connectedNode.getLog().info("Load configuration...");
+        NodeSimpleConfig.logger.debug("Load Configuration... (ns, name, rate, frame)");
 
         this.namespace  = this.connectedNode.getParameter(PARAM_NAMESPACE).toParameterValue().getStringValue();
         this.nodeName   = this.connectedNode.getParameter(PARAM_NODENAME).toParameterValue().getStringValue();
         this.fixedFrame = this.connectedNode.getParameter(PARAM_FRAME).toParameterValue().getStringValue();
         this.rate       = this.connectedNode.getParameter(PARAM_RATE).toParameterValue().getIntegerValue();
 
+        // Check zero or negative rate.
         if (this.rate <= 0) {
             this.rate = 1;
             this.connectedNode.setParameters(
