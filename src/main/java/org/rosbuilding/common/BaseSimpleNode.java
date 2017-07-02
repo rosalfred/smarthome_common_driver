@@ -34,6 +34,11 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
      */
     protected abstract TConfiguration makeConfiguration();
 
+    public BaseSimpleNode() {
+        this.configuration = this.makeConfiguration();
+        this.configuration.loadParameters();
+    }
+
     /**
      * Load parameters of launcher
      */
@@ -53,9 +58,6 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
         BaseSimpleNode.logger.debug("onStart event !");
 
         this.connectedNode = connectedNode;
-        this.configuration = this.makeConfiguration();
-//        this.configuration.loadParameters();
-
         this.logI(String.format("Started %s node !", this.connectedNode.getName()));
     }
 
