@@ -8,7 +8,7 @@
  */
 package org.rosbuilding.common.media;
 
-import org.rosbuilding.common.IModule;
+import org.rosbuilding.common.Module;
 
 import smarthome_media_msgs.msg.MediaAction;
 import smarthome_media_msgs.msg.StateData;
@@ -20,7 +20,7 @@ import smarthome_media_msgs.srv.ToggleMuteSpeaker_Response;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public interface ISpeaker extends IModule<StateData, MediaAction> {
+public abstract class Speaker extends Module<StateData, MediaAction> {
     public static final int LEVEL_MIN = 0;
     public static final int LEVEL_MAX = 100;
     public static final int LEVEL_STEP = 10;
@@ -37,5 +37,5 @@ public interface ISpeaker extends IModule<StateData, MediaAction> {
      * @param request
      * @param response
      */
-    void handleSpeakerMuteToggle(ToggleMuteSpeaker_Request request, ToggleMuteSpeaker_Response response);
+    public abstract void handleSpeakerMuteToggle(ToggleMuteSpeaker_Request request, ToggleMuteSpeaker_Response response);
 }

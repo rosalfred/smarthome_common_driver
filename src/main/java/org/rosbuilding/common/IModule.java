@@ -9,6 +9,7 @@
 package org.rosbuilding.common;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.ros2.rcljava.internal.message.Message;
 
@@ -21,6 +22,8 @@ public interface IModule<TStateData extends Message, TMessage extends Message> {
 
     public static final String SEP = "::";
     public static final String URI_DATA = "data://";
+
+    List<String> getAvailableMethods();
 
     /**
      * Refresh stateDate info.

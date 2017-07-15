@@ -30,7 +30,7 @@ public class CommandUtil {
     public enum Action {
         SAY("say"),
         SHOW("show"),
-        VIEW("mediamovie" + IPlayer.OP_OPEN);
+        VIEW("mediamovie" + Player.OP_OPEN);
 
         private String label;
         private Action(String label) {

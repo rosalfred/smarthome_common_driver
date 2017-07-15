@@ -11,6 +11,7 @@ import org.rosbuilding.common.IModule;
 import org.rosbuilding.common.MessageConverter;
 
 public class MediaMessageConverter implements MessageConverter<MediaAction> {
+    @Override
     public MediaAction toMessage(Node node, Command command) {
         MediaAction mediaAction = null;
 

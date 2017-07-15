@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class NodeSimpleConfig {
 
-    public static final String PARAM_NAMESPACE  = "ns";
+    public static final String PARAM_NAMESPACE  = "prefix";
     public static final String PARAM_NODENAME   = "node";
     public static final String PARAM_RATE       = "rate";
     public static final String PARAM_FRAME      = "fixed_frame";
@@ -46,8 +46,8 @@ public abstract class NodeSimpleConfig {
 
         this.connectedNode.setParameters(
                 Arrays.<ParameterVariant<?>>asList(
-                        new ParameterVariant<String>(PARAM_NAMESPACE,  namespace),
-                        new ParameterVariant<String>(PARAM_NODENAME,  nodeName),
+                        new ParameterVariant<String>(PARAM_NAMESPACE,  defaultNameSpace),
+                        new ParameterVariant<String>(PARAM_NODENAME,  defaultNodeName),
                         new ParameterVariant<Long>  (PARAM_RATE,    1L),
                         new ParameterVariant<String>(PARAM_FRAME,   defaultFixedFrame)
         ));

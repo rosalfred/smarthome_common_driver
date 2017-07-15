@@ -194,10 +194,18 @@ public abstract class BaseDriverNode<
         BaseDriverNode.logger.debug("onNewMessage events ! (" + Command.class.getName() + ")");
 
         String[] wheres = command.getContext().getWhere().split(" ");
+        List<String> availableMethodes;
 
         for (String where : wheres) {
             if (this.configuration.getPrefix().contains(where)) {
-                this.onNewMessage(this.converter.toMessage(this.connectedNode, command));
+                for (IModule<TStateData, TMessage> module : this.modules) {
+                    availableMethodes = module.getAvailableMethods();
+
+                    if (availableMethodes != null && availableMethodes.contains(command.getAction().substring(2))) {
+                        this.onNewMessage(this.converter.toMessage(this.connectedNode, command));
+                        break;
+                    }
+                }
             }
         }
     }

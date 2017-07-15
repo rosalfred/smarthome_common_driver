@@ -1,11 +1,26 @@
 package org.rosbuilding.common;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.ros2.rcljava.internal.message.Message;
 
 
-public class Module<T extends Message, V extends Message> implements IModule<T, V> {
+public abstract class Module<T extends Message, V extends Message> implements IModule<T, V> {
+
+    private final List<String> availableMehods = new ArrayList<>();
+
+    protected Module() {
+        this.initializeAvailableMethods(this.availableMehods);
+    }
+
+    protected abstract void initializeAvailableMethods(List<String> availableMehods);
+
+    @Override
+    public List<String> getAvailableMethods() {
+        return this.availableMehods;
+    }
 
     @Override
     public void load(T stateData) {
