@@ -1,5 +1,5 @@
 plugins {
-    id "org.ros2.rcljava" version "0.4.10"
+    id "org.ros2.rcljava" version "0.5.0"
 }
 
 apply plugin: 'org.ros2.rcljava'
