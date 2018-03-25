@@ -56,7 +56,7 @@ public abstract class NodeDriverConnectedConfig extends NodeDriverConfig {
         this.user       = this.connectedNode.getParameter(PARAM_USER).toParameterValue().getStringValue();
         this.password   = this.connectedNode.getParameter(PARAM_PASSWORD).toParameterValue().getStringValue();
 
-      this.connectedNode.getLog().info(
+      this.connectedNode.getLogger().info(
           String.format("Dump configuration parameters\nrate \t\t: %s\nprefix \t\t: %s\nfixedFrame \t: %s\nip \t\t: %s\nmac \t\t: %s\nport \t\t: %s\nuser \t\t: %s\npassword \t: %s",
               this.getRate(),
               this.getPrefix(),

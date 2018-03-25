@@ -102,7 +102,7 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
      * @param message this message
      */
     public void logD(final Object message) {
-        this.connectedNode.getLog().debug(message);
+        this.connectedNode.getLogger().debug(message);
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
      * @param message this message
      */
     public void logI(final Object message) {
-        this.connectedNode.getLog().info(message);
+        this.connectedNode.getLogger().info(message);
     }
 
     /**
@@ -118,7 +118,7 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
      * @param message this message
      */
     public void logE(final Object message) {
-        this.connectedNode.getLog().error(message);
+        this.connectedNode.getLogger().error(message);
     }
 
     /**
@@ -126,7 +126,7 @@ public abstract class BaseSimpleNode<TConfiguration extends NodeSimpleConfig> {
      * @param message this message
      */
     public void logE(final Exception message) {
-        this.connectedNode.getLog().error(message.getMessage());
+        this.connectedNode.getLogger().error(message.getMessage());
     }
 
     public final Node getConnectedNode() {

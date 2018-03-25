@@ -41,7 +41,7 @@ public abstract class NodeSimpleConfig {
             final int defaultRate) {
         this.connectedNode = connectedNode;
 
-        this.connectedNode.getLog().info("Initialize configuration...");
+        this.connectedNode.getLogger().info("Initialize configuration...");
         NodeSimpleConfig.logger.debug("Initialize configuration... (ns, name, rate, frame)");
 
         this.connectedNode.setParameters(
@@ -54,7 +54,7 @@ public abstract class NodeSimpleConfig {
     }
 
     protected void loadParameters() {
-        this.connectedNode.getLog().info("Load configuration...");
+        this.connectedNode.getLogger().info("Load configuration...");
         NodeSimpleConfig.logger.debug("Load Configuration... (ns, name, rate, frame)");
 
         this.namespace  = this.connectedNode.getParameter(PARAM_NAMESPACE).toParameterValue().getStringValue();
