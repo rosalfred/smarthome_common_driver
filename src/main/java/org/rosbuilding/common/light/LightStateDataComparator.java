@@ -34,7 +34,7 @@ public class LightStateDataComparator extends StateDataComparator<StateData> {
             StateData stateData) {
         StateData result = new StateData();
         result.setHeader(new Header());
-        result.getHeader().setStamp(conectedNode.getCurrentTime());
+        result.getHeader().setStamp(conectedNode.now());
         result.setState(stateData.getState());
         //result.setDescriptor();
         result.setHsb(makeNewCopy(conectedNode, stateData.getHsb()));
@@ -49,7 +49,7 @@ public class LightStateDataComparator extends StateDataComparator<StateData> {
         Illuminance result = new Illuminance();
         if (illuminance != null) {
             result.setHeader(new Header());
-            result.getHeader().setStamp(conectedNode.getCurrentTime());
+            result.getHeader().setStamp(conectedNode.now());
             result.setIlluminance(illuminance.getIlluminance());
             result.setVariance(illuminance.getVariance());
         }

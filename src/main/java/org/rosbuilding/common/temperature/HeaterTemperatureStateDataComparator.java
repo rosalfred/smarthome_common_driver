@@ -57,7 +57,7 @@ public class HeaterTemperatureStateDataComparator extends StateDataComparator<He
         HeatingStateData result = new HeatingStateData(); //connectedNode.getTopicMessageFactory().newFromType(HeatingStateData._TYPE);
 
 //        result.getHeader().setFrameId(frameId); // Remove on ROS2
-        result.getHeader().setStamp(connectedNode.getCurrentTime());
+        result.getHeader().setStamp(connectedNode.now());
         result.setProportional(stateData.getProportional());
         result.setIntegral(stateData.getIntegral());
         result.setDerivative(stateData.getDerivative());
@@ -76,7 +76,7 @@ public class HeaterTemperatureStateDataComparator extends StateDataComparator<He
         HeatingTemperatureSlot result = new HeatingTemperatureSlot(); //connectedNode.getTopicMessageFactory().newFromType(HeatingTemperatureSlot._TYPE);
 
 //        result.getHeader().setFrameId(frameId); // Remove on ROS2
-        result.getHeader().setStamp(connectedNode.getCurrentTime());
+        result.getHeader().setStamp(connectedNode.now());
 
         result.setDateBegin(data.getDateBegin());
         result.setDateEnd(data.getDateEnd());

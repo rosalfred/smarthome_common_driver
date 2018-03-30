@@ -29,7 +29,7 @@ public class MediaStateDataComparator extends StateDataComparator<StateData> {
         StateData result = new StateData(); //conectedNode.getTopicMessageFactory().newFromType(StateData._TYPE);
 //        result.getHeader().setFrameId(frameId); // Removed on ROS2
         result.setHeader(new Header());
-        result.getHeader().setStamp(conectedNode.getCurrentTime());
+        result.getHeader().setStamp(conectedNode.now());
         result.setState(stateData.getState());
         result.setMonitor(makeNewCopy(conectedNode, stateData.getMonitor()));
         result.setPlayer(makeNewCopy(conectedNode, stateData.getPlayer()));

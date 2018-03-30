@@ -28,7 +28,7 @@ public class SensorTemperatureStateDataComparator extends StateDataComparator<Se
             SensorTemperatureStateData stateData) {
         SensorTemperatureStateData result = new SensorTemperatureStateData(); //connectedNode.getTopicMessageFactory().newFromType(SensorTemperatureStateData._TYPE);
 //        result.getHeader().setFrameId(frameId); // Remove on ROS2
-        result.getHeader().setStamp(connectedNode.getCurrentTime());
+        result.getHeader().setStamp(connectedNode.now());
         result.setState(stateData.getState());
         result.setTemperatureAmbiant(makeNewCopy(connectedNode, frameId, stateData.getTemperatureAmbiant()));
         result.setTemperatureObject(makeNewCopy(connectedNode, frameId, stateData.getTemperatureObject()));
@@ -43,7 +43,7 @@ public class SensorTemperatureStateDataComparator extends StateDataComparator<Se
 
         Temperature result = new Temperature(); // connectedNode.getTopicMessageFactory().newFromType(Temperature._TYPE);
 
-        result.getHeader().setStamp(connectedNode.getCurrentTime());
+        result.getHeader().setStamp(connectedNode.now());
 //        result.getHeader().setFrameId(frameId); // Remove on ROS2
         result.setTemperature(temperature.getTemperature());
         result.setVariance(temperature.getVariance());
